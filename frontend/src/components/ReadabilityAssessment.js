@@ -6,11 +6,14 @@ const ReadabilityAssessment = () => {
 
   const calculateReadability = (text) => {
     const words = text.split(/\s+/).filter(word => word.length > 0).length;
+    console.log(words);
     const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).length;
+    console.log(sentences);
     const syllables = text.split(/\s+/).reduce((count, word) => count + countSyllables(word), 0);
-
+    console.log(syllables);
     // Flesch Reading Ease formula
     const fleschScore = 206.835 - (1.015 * (words / sentences)) - (84.6 * (syllables / words));
+    console.log(fleschScore);
     return Math.round(fleschScore);
   };
 
