@@ -15,8 +15,8 @@ function App() {
 
         <main className="flex-grow"> {/* This allows main to take up available space */}
           <Routes>
-            <Route path="/" element={<LandingPage />} /> {/* Landing Page */}
-            <Route path="/survey" element={<SurveyPage />} /> {/* Survey Page */}
+            <Route path="/" element={<SurveyPage />} /> {/* Landing Page */}
+            {/* <Route path="/survey" element={<SurveyPage />} /> Survey Page */}
           </Routes>
         </main>
 
