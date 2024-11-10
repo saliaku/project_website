@@ -4,6 +4,20 @@ import WMCAssessment from '../components/WCAssessment';
 import IPAssessment from '../components/IPAssessment';
 
 const SurveyPage = () => {
+  // State for user input fields
+  const [formData, setFormData] = useState({
+    name: '',
+    school: '',
+    rollNumber: '',
+  });
+
+  // State for assessment metrics
+  const [metrics, setMetrics] = useState({
+    readabilityScore: 0,
+    wmcScore: 0,
+    ipScore: 0,
+  });
+
   // State to control visibility for each section
   const [isReadabilityOpen, setReadabilityOpen] = useState(false);
   const [isWMCOpen, setWMCOpen] = useState(false);
@@ -14,8 +28,57 @@ const SurveyPage = () => {
   const toggleWMC = () => setWMCOpen(!isWMCOpen);
   const toggleIP = () => setIPOpen(!isIPOpen);
 
+  // // Prepare data for backend
+  //   const dataToSend = {
+  //     ...formData,
+  //     ...calculatedMetrics,
+  //   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+ 
+
   return (
     <div className="max-w-4xl mx-auto p-6">
+
+      {/* User Input Form */}
+      <div className="mb-6">
+        <label className="block mb-2">
+          Name:
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="block mb-2">
+          School:
+          <input
+            type="text"
+            name="school"
+            value={formData.school}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </label>
+        <label className="block mb-4">
+          Roll Number:
+          <input
+            type="text"
+            name="rollNumber"
+            value={formData.rollNumber}
+            onChange={handleInputChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </label>
+      </div>
+
       {/* Readability Assessment Section */}
       <div className="bg-white shadow-md rounded-lg mb-4 overflow-hidden">
         <button
