@@ -48,6 +48,12 @@ const SurveyPage = () => {
       setFormData((prev) => ({ ...prev, ipScore: ipScore }));
       setMetrics((prev) => ({ ...prev, ipScore }));
     };
+
+       // Function to update IPscores
+       const updateScoresWMC = (wmcScore) => {
+        setFormData((prev) => ({ ...prev, wmcScore: wmcScore }));
+        setMetrics((prev) => ({ ...prev, wmcScore }));
+      };
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -117,7 +123,7 @@ const SurveyPage = () => {
         </button>
         {isWMCOpen && (
           <div className="p-6 bg-gray-50">
-            <WMCAssessment />
+            <WMCAssessment updateScoresWMC={updateScoresWMC} />
           </div>
         )}
       </div>

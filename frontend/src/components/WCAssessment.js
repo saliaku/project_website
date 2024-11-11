@@ -21,7 +21,7 @@ const words = [
   // Add more words as needed
 ];
 
-const WMCAssessment = () => {
+const WMCAssessment = ({updateScoresWMC}) => {
   const n = 2; // Number of items to remember
   const [items, setItems] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -38,6 +38,7 @@ const WMCAssessment = () => {
     const correctAnswer = items[currentIndex]?.id === items[currentIndex - n]?.id;
     if (answer === correctAnswer) {
       setScore((prev) => prev + 1);
+      updateScoresWMC(score + 1);
     }
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
@@ -90,6 +91,7 @@ const WMCAssessment = () => {
 
       <p className="mt-4">Current Score: {score}</p>
     </div>
+    
   );
 };
 
