@@ -85,7 +85,7 @@ const SurveyPage = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
           <label className="block text-white mb-2">
@@ -95,7 +95,7 @@ const SurveyPage = () => {
               name="school"
               value={formData.school}
               onChange={handleInputChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
           <label className="block text-white mb-4">
@@ -105,7 +105,7 @@ const SurveyPage = () => {
               name="rollNumber"
               value={formData.rollNumber}
               onChange={handleInputChange}
-              className="w-full p-3 mt-2 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-3 mt-2 mb-4 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
         </div>

@@ -36,3 +36,47 @@
 }
 
 /* Generate random star positions and sizes using JavaScript */
+
+@keyframes typing {
+    0% {
+      content: "";
+    }
+    10% {
+      content: "L";
+    }
+    20% {
+      content: "Lo";
+    }
+    30% {
+      content: "Loa";
+    }
+    40% {
+      content: "Load";
+    }
+    50% {
+      content: "Loadi";
+    }
+    60% {
+      content: "Loadin";
+    }
+    70% {
+      content: "Loading";
+    }
+    80% {
+      content: "Loading.";
+    }
+    90% {
+      content: "Loading..";
+    }
+    100% {
+      content: "Loading...";
+    }
+  }
+  
+  .typing-effect::after {
+    content: "";
+    font-size: 1.5rem;
+    color: white;
+    animation: typing 3s steps(10, end) infinite;
+  }
+  
