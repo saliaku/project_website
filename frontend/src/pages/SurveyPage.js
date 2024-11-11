@@ -9,6 +9,9 @@ const SurveyPage = () => {
     name: '',
     school: '',
     rollNumber: '',
+    fleschScore: '',
+    ipScore: '',
+    wmcScore: '',
   });
 
   // State for assessment metrics
@@ -33,18 +36,28 @@ const SurveyPage = () => {
   //     ...formData,
   //     ...calculatedMetrics,
   //   };
+
+  // Function to update FLESCHscores
+  const updateScores = (readabilityScore) => {
+    setFormData((prev) => ({ ...prev, fleschScore: readabilityScore }));
+    setMetrics((prev) => ({ ...prev, readabilityScore }));
+  };
+
+    // Function to update IPscores
+    const updateScoresIP = (ipScore) => {
+      setFormData((prev) => ({ ...prev, ipScore: ipScore }));
+      setMetrics((prev) => ({ ...prev, ipScore }));
+    };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [name]: value });
   };
- 
+
+  console.log(formData);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-
       {/* User Input Form */}
       <div className="mb-6">
         <label className="block mb-2">
@@ -89,7 +102,7 @@ const SurveyPage = () => {
         </button>
         {isReadabilityOpen && (
           <div className="p-6 bg-gray-50">
-            <ReadabilityAssessment />
+            <ReadabilityAssessment updateScores={updateScores} />
           </div>
         )}
       </div>
@@ -119,7 +132,7 @@ const SurveyPage = () => {
         </button>
         {isIPOpen && (
           <div className="p-6 bg-gray-50">
-            <IPAssessment />
+            <IPAssessment updateScoresIP={updateScoresIP} />
           </div>
         )}
       </div>

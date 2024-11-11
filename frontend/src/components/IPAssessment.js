@@ -17,7 +17,7 @@ const questions = [
   "Create?"
 ];
 
-const IPAssessment = () => {
+const IPAssessment = ({ updateScoresIP }) => {
   const [currentPromptIndex] = useState(0); // Assuming only one prompt for now
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [scores, setScores] = useState(Array(6).fill(null)); // For 6 questions
@@ -33,6 +33,8 @@ const IPAssessment = () => {
     if (currentQuestionIndex < 5) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      // Update scores and set completion state
+      updateScoresIP(scores);
       setIsCompleted(true);
     }
   };
@@ -79,7 +81,9 @@ const IPAssessment = () => {
             <div className="flex justify-between mb-4">
               <button
                 onClick={handlePreviousQuestion}
-                className={`bg-blue-500  text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600  transition duration-200 ${currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600 transition duration-200 ${
+                  currentQuestionIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
                 disabled={currentQuestionIndex === 0}
               >
                 Previous
@@ -94,19 +98,9 @@ const IPAssessment = () => {
           </>
         ) : (
           <div className="text-center">
-            <h2 className="text-lg font-bold">Assessment Complete!</h2>
-            <p>Your scores: {scores.join(', ')}</p>
-            <button
-              onClick={() => {
-                // Reset state for another round if desired
-                setScores(Array(6).fill(null));
-                setIsCompleted(false);
-                setCurrentQuestionIndex(0);
-              }}
-              className="mt-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600 transition duration-200"
-            >
-              Restart
-            </button>
+            <h2 className="text-lg font-bold">Congratulations!</h2>
+            <p>You've successfully completed the assessment.</p>
+            {/* <p>Your scores: {scores.join(', ')}</p> */}
           </div>
         )}
       </div>

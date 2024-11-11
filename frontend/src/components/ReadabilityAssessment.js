@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ReadabilityAssessment = () => {
+const ReadabilityAssessment = ({ updateScores }) => {
   const [text, setText] = useState('');
   const [score, setScore] = useState(null);
 
@@ -33,6 +33,7 @@ const ReadabilityAssessment = () => {
     event.preventDefault();
     const readabilityScore = calculateReadability(text);
     setScore(readabilityScore);
+    updateScores(readabilityScore);  // Update the parent component's score
   };
 
   return (
@@ -56,12 +57,7 @@ const ReadabilityAssessment = () => {
 
       {score !== null && (
         <div className="mt-4">
-          {/* <h2 className="text-xl font-semibold">Readability Score: {score}</h2> */}
-          {/* <p className="text-gray-600">
-            {score > 60 ? "Your text is easily understandable by 13- to 15-year-old students." : 
-             score > 30 ? "Your text may be difficult for some readers." : 
-             "Your text is very complex and may be hard for most readers."}
-          </p> */}
+          <h2 className="text-xl font-semibold">Readability Score: {score}</h2>
         </div>
       )}
     </div>
