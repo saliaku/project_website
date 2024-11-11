@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/LandingPage";
 import LoadingScreen from "./pages/LoadingScreen";
 import SurveyPage from "./pages/SurveyPage";
 
@@ -20,7 +20,7 @@ function App() {
             <Header />
             <main className="flex-grow">
               <Routes>
-                <Route path="/" element={<SurveyPage />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/survey" element={<SurveyPage />} />
               </Routes>
             </main>

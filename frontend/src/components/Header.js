@@ -9,7 +9,7 @@ function Header() {
       <div className="absolute inset-0 bg-stars opacity-30"></div>
       
       <div className="container mx-auto px-4 relative z-20 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-semibold">
+        <Link to="/" className="text-2xl font-semibold hover:text-blue-300 hover:scale-105  hover:animate-pulse  transition-all duration-500">
           Final Year Project Website
         </Link>
         {/* Placeholder for additional links or buttons if needed */}
