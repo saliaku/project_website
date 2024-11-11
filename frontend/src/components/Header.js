@@ -1,13 +1,19 @@
 // src/components/Header.js
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <header className="bg-blue-500 text-white p-4">
-      <Link to="/"> {/* Make the h1 clickable */}
-        <h1 className="text-xl cursor-pointer">Final year project website</h1>
-      </Link>
+    <header className="relative bg-gradient-to-br from-indigo-900 via-blue-700 to-violet-800 text-white py-6 shadow-md z-10">
+      {/* Background stars effect */}
+      <div className="absolute inset-0 bg-stars opacity-30"></div>
+      
+      <div className="container mx-auto px-4 relative z-20 flex items-center justify-between">
+        <Link to="/" className="text-2xl font-semibold">
+          Final Year Project Website
+        </Link>
+        {/* Placeholder for additional links or buttons if needed */}
+      </div>
     </header>
   );
 }
