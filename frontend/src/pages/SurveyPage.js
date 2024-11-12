@@ -14,6 +14,8 @@ const SurveyPage = () => {
     wmcScore: '',
   });
 
+  console.log(formData);
+
   const [metrics, setMetrics] = useState({
     readabilityScore: 0,
     wmcScore: 0,
