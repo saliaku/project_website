@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 
-const ReadabilityAssessment = () => {
+const ReadabilityAssessment = ({ updateScores }) => {
   const [text, setText] = useState('');
   const [score, setScore] = useState(null);
 
   const calculateReadability = (text) => {
     const words = text.split(/\s+/).filter(word => word.length > 0).length;
-    console.log(words);
     const sentences = text.split(/[.!?]+/).filter(sentence => sentence.trim().length > 0).length;
-    console.log(sentences);
     const syllables = text.split(/\s+/).reduce((count, word) => count + countSyllables(word), 0);
-    console.log(syllables);
+
+    // Handle edge cases: prevent division by zero
+    if (words === 0 || sentences === 0) return 0;
+
     // Flesch Reading Ease formula
     const fleschScore = 206.835 - (1.015 * (words / sentences)) - (84.6 * (syllables / words));
-    console.log(fleschScore);
-    return Math.round(fleschScore);
+    return Math.max(0, Math.min(100, Math.round(fleschScore))); // Limit score between 0 and 100
   };
 
   const countSyllables = (word) => {
     word = word.toLowerCase();
-    if (word.length <= 3) return 1; // simple rule for short words
-    const matches = word.match(/[aeiouy]{1,2}/g);
-    return matches ? matches.length : 0;
+    if (word.length <= 3) return 1;
+    const syllablePattern = /[aeiouy]+/g;
+    const matches = word.match(syllablePattern) || [];
+    
+    // Adjust syllable count for specific cases, e.g., silent 'e'
+    let syllables = matches.length;
+    if (word.endsWith("e") && syllables > 1) syllables -= 1; // Silent 'e' at end of word
+    return syllables;
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const readabilityScore = calculateReadability(text);
     setScore(readabilityScore);
+    updateScores(readabilityScore);  // Update the parent component's score
   };
 
   return (
@@ -52,11 +58,6 @@ const ReadabilityAssessment = () => {
       {score !== null && (
         <div className="mt-4">
           <h2 className="text-xl font-semibold">Readability Score: {score}</h2>
-          <p className="text-gray-600">
-            {score > 60 ? "Your text is easily understandable by 13- to 15-year-old students." : 
-             score > 30 ? "Your text may be difficult for some readers." : 
-             "Your text is very complex and may be hard for most readers."}
-          </p>
         </div>
       )}
     </div>

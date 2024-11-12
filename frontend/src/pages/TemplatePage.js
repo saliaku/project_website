@@ -1,16 +1,8 @@
-// src/components/LandingPage.js
+// src/components/__template.js
 import React, { useEffect, useRef } from "react";
 import "../index.css"; // Import CSS for star effect
-import AboutProject from "../components/AboutProject";
-import OurVision from "../components/OurVision";
-import OurMotivation from "../components/OurMotivation";
-import Benefits from "../components/Benefits";
-import ForParents from "../components/ForParents";
-import OtherWebsites from "../components/OtherWebsites";
-import Contact from "../components/Contact";
-import Survey from "../components/Survey";
 
-const LandingPage = () => {
+const __template = () => {
   const starContainerRef = useRef(null);
 
   useEffect(() => {
@@ -45,19 +37,18 @@ const LandingPage = () => {
       {/* Star background animation */}
       <div ref={starContainerRef} className="absolute inset-0 bg-stars"></div>
 
+      
+
       {/* Main content */}
-      <main className="relative z-10 text-center text-white px-6 max-w-4xl">
-        <Survey />
-        <AboutProject />
-        <OurVision />
-        <OurMotivation />
-        <Benefits />
-        <ForParents />
-        <OtherWebsites />
-        <Contact />
+      <main className="relative z-10 text-center text-white px-6">
+        
+
+        
       </main>
+
+      
     </div>
   );
 };
 
-export default LandingPage;
+export default __template;

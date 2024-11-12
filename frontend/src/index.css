@@ -2,3 +2,81 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Twinkling stars effect */
+@keyframes twinkle {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+
+/* Star background configuration */
+.bg-stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* Each individual star */
+.bg-stars .star {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    animation: twinkle 1.5s infinite;
+}
+
+/* Animation for stars to twinkle */
+@keyframes randomOpacity {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+/* Generate random star positions and sizes using JavaScript */
+
+@keyframes typing {
+    0% {
+      content: "";
+    }
+    10% {
+      content: "L";
+    }
+    20% {
+      content: "Lo";
+    }
+    30% {
+      content: "Loa";
+    }
+    40% {
+      content: "Load";
+    }
+    50% {
+      content: "Loadi";
+    }
+    60% {
+      content: "Loadin";
+    }
+    70% {
+      content: "Loading";
+    }
+    80% {
+      content: "Loading.";
+    }
+    90% {
+      content: "Loading..";
+    }
+    100% {
+      content: "Loading...";
+    }
+  }
+  
+  .typing-effect::after {
+    content: "";
+    font-size: 1.5rem;
+    color: white;
+    animation: typing 3s steps(10, end) infinite;
+  }
+  
