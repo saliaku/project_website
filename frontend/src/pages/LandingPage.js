@@ -8,6 +8,7 @@ import ForParents from "../components/ForParents";
 import OtherWebsites from "../components/OtherWebsites";
 import Contact from "../components/Contact";
 import Survey from "../components/Survey";
+import Purpose from "../components/Purpose";
 
 const LandingPage = () => {
   const starContainerRef = useRef(null);
@@ -37,13 +38,12 @@ const LandingPage = () => {
   }, []);
 
   const sections = [
-    { id: "about-project", component: <AboutProject />, align: "left" },
-    { id: "our-vision", component: <OurVision />, align: "right" },
+    { id: "purpose", component: <Purpose/>, align: "left"},
+    { id: "about-project", component: <AboutProject />, align: "right" },
     { id: "our-motivation", component: <OurMotivation />, align: "left" },
     { id: "benefits", component: <Benefits />, align: "right" },
     { id: "for-parents", component: <ForParents />, align: "left" },
     { id: "other-websites", component: <OtherWebsites />, align: "right" },
-    { id: "contact", component: <Contact />, align: "left" },
   ];
 
   return (
@@ -61,9 +61,9 @@ const LandingPage = () => {
               id={section.id} // Assigning an ID for smooth scrolling
               className={`col-span-12 md:col-span-9 ${
                 section.align === "right"
-                  ? "md:col-start-4 md:ml-auto"
+                  ? "md:col-start-3 md:ml-auto"
                   : "md:col-start-2 md:mr-auto"
-              } transition-transform duration-500 ease-in-out hover:scale-105`}
+              } transition-transform duration-500 ease-in-out hover:scale-105 mb-8 mt-4`}
             >
               <div
                 className={`p-6 bg-white bg-opacity-5 rounded-lg shadow-lg transform hover:translate-y-[-5px] transition-all duration-300`}
