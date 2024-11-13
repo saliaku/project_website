@@ -90,7 +90,7 @@ const SurveyPage = () => {
   }, []);
 
   return (
-    <div className="relative bg-gradient-to-br from-indigo-900 via-blue-700 to-violet-800 overflow-hidden min-h-screen pb-0 mb-0">
+    <div className="relative bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
       <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
 
       <div className="max-w-4xl mx-auto p-6 relative z-10 pb-0 mb-0"> {/* Removed bottom padding */}

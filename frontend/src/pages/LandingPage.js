@@ -47,7 +47,7 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-indigo-900 via-blue-700 to-violet-800 overflow-hidden">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 overflow-hidden">
       {/* Star background animation */}
       <div ref={starContainerRef} className="absolute inset-0 bg-stars"></div>
 
