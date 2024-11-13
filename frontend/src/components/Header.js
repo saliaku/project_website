@@ -16,16 +16,16 @@ const Header = () => {
 
       <div className="container mx-auto px-4 relative z-20 flex items-right justify-between">
       <div className="text-2xl font-bold hover:text-blue-300 transition-colors duration-1000 hover:text-purple-600">
-  Final Year Project Website
+  Data collection Assessment
 </div>
 
         {/* Navigation links */}
         <nav className="hidden lg:flex space-x-4  text-small text-right">
+        <button onClick={() => scrollToSection("purpose")} className="hover:text-blue-300 transition">
+            Purpose
+          </button>
           <button onClick={() => scrollToSection("about-project")} className="hover:text-blue-300 transition">
             About
-          </button>
-          <button onClick={() => scrollToSection("our-vision")} className="hover:text-blue-300 transition">
-            Vision
           </button>
           <button onClick={() => scrollToSection("our-motivation")} className="hover:text-blue-300 transition">
             Motivation
@@ -39,36 +39,8 @@ const Header = () => {
           <button onClick={() => scrollToSection("other-websites")} className="hover:text-blue-300 transition">
             Resources
           </button>
-          <button onClick={() => scrollToSection("contact")} className="hover:text-blue-300 transition">
-            Contact
-          </button>
         </nav>
       </div>
-
-      {/* Mobile Navigation links hidden on smaller screens */}
-      <nav className="lg:hidden hidden">
-        <button onClick={() => scrollToSection("about-project")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          About
-        </button>
-        <button onClick={() => scrollToSection("our-vision")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          Vision
-        </button>
-        <button onClick={() => scrollToSection("our-motivation")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          Motivation
-        </button>
-        <button onClick={() => scrollToSection("benefits")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          Benefits
-        </button>
-        <button onClick={() => scrollToSection("for-parents")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          For Parents
-        </button>
-        <button onClick={() => scrollToSection("other-websites")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          Resources
-        </button>
-        <button onClick={() => scrollToSection("contact")} className="block w-full text-center py-2 px-4 text-lg bg-transparent hover:bg-blue-600 transition">
-          Contact
-        </button>
-      </nav>
     </header>
   );
 };

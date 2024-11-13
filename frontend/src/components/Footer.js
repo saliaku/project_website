@@ -7,7 +7,7 @@ function Footer() {
       {/* Background stars effect */}
       <div className="absolute inset-0 bg-stars opacity-30"></div>
       <p className="text-center z-20 relative">
-        Sreeshma ~~  Serena ~~ Kailas
+        Sreeshma Sangesh ~~  Serena Anthony ~~ H Kailas Nath
       </p>
     </footer>
   );
