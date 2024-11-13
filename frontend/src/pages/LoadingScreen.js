@@ -36,7 +36,7 @@ const LoadingScreen = ({ setLoadingComplete }) => {
 
   return (
     <div
-      className="relative w-full h-screen bg-gradient-to-br from-violet-900 via-indigo-900 to-purple-900 overflow-hidden flex items-center justify-center"
+      className="relative w-full h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden flex items-center justify-center"
       onClick={handleClick}
     >
       <img src={logo} alt="Logo" className="absolute top-2 left-5 w-65 h-60" />
