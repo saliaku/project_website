@@ -3,6 +3,9 @@ import ReadabilityAssessment from '../components/ReadabilityAssessment';
 import WMCAssessment from '../components/WCAssessment';
 import IPAssessment from '../components/IPAssessment';
 import "../index.css"; // Import your Tailwind CSS
+import axios from 'axios'; // Import axios if you're using it
+
+
 
 const SurveyPage = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +16,18 @@ const SurveyPage = () => {
     ipScore: '',
     wmcScore: '',
   });
+
+  const sendFormDataToBackend = async () => {
+    try {
+        const response = await axios.post('http://localhost:5000/api/formdata', formData);
+
+        console.log('Response from backend:', response.data);
+        alert('Form data sent successfully!');
+    } catch (error) {
+        console.error('Error sending form data:', error);
+        alert('Failed to send form data.');
+    }
+};
 
   console.log(formData);
 
@@ -153,6 +168,14 @@ const SurveyPage = () => {
             </div>
           )}
         </div>
+
+        <button
+    onClick={sendFormDataToBackend}
+    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+>
+    Submit Form Data
+</button>
+
       </div>
     </div>
   );
