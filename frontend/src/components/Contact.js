@@ -7,8 +7,6 @@ const Contact = () => (
     <p className="text-lg text-justify">
       For further information, feel free to reach out to us.
     </p>
-
-    <h1 className="text-7xl mt-20">Thank YOU</h1>
   </section>
 );
 

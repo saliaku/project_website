@@ -1,4 +1,3 @@
-// src/components/LandingPage.js
 import React, { useEffect, useRef } from "react";
 import "../index.css"; // Import CSS for star effect
 import AboutProject from "../components/AboutProject";
@@ -17,7 +16,6 @@ const LandingPage = () => {
     const numStars = 50; // Total stars
     const container = starContainerRef.current;
 
-    // Create stars if they don't exist
     if (container && !container.hasChildNodes()) {
       for (let i = 0; i < numStars; i++) {
         const star = document.createElement("div");
@@ -26,7 +24,6 @@ const LandingPage = () => {
         const yPosition = Math.random() * 100; // Random vertical position (0 to 100%)
         const animationDuration = Math.random() * 2 + 1; // Random twinkle animation duration (1s to 3s)
 
-        // Set star properties
         star.classList.add("star");
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
@@ -34,27 +31,48 @@ const LandingPage = () => {
         star.style.top = `${yPosition}%`;
         star.style.animationDuration = `${animationDuration}s`;
 
-        // Append the star to the container
         container.appendChild(star);
       }
     }
   }, []);
 
+  const sections = [
+    { id: "about-project", component: <AboutProject />, align: "left" },
+    { id: "our-vision", component: <OurVision />, align: "right" },
+    { id: "our-motivation", component: <OurMotivation />, align: "left" },
+    { id: "benefits", component: <Benefits />, align: "right" },
+    { id: "for-parents", component: <ForParents />, align: "left" },
+    { id: "other-websites", component: <OtherWebsites />, align: "right" },
+    { id: "contact", component: <Contact />, align: "left" },
+  ];
+
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-indigo-900 via-blue-700 to-violet-800 overflow-hidden flex flex-col items-center justify-center">
+    <div className="relative w-full min-h-screen bg-gradient-to-br from-indigo-900 via-blue-700 to-violet-800 overflow-hidden">
       {/* Star background animation */}
       <div ref={starContainerRef} className="absolute inset-0 bg-stars"></div>
 
       {/* Main content */}
-      <main className="relative z-10 text-center text-white px-6 max-w-4xl">
-        <Survey />
-        <AboutProject />
-        <OurVision />
-        <OurMotivation />
-        <Benefits />
-        <ForParents />
-        <OtherWebsites />
-        <Contact />
+      <main className="relative z-10 text-center text-white px-6 max-w-7xl">
+        <Survey className="text-center"/>
+        <div className="grid grid-cols-12 gap-y-8">
+          {sections.map((section, index) => (
+            <div
+              key={index}
+              id={section.id} // Assigning an ID for smooth scrolling
+              className={`col-span-12 md:col-span-9 ${
+                section.align === "right"
+                  ? "md:col-start-4 md:ml-auto"
+                  : "md:col-start-2 md:mr-auto"
+              } transition-transform duration-500 ease-in-out hover:scale-105`}
+            >
+              <div
+                className={`p-6 bg-white bg-opacity-5 rounded-lg shadow-lg transform hover:translate-y-[-5px] transition-all duration-300`}
+              >
+                {section.component}
+              </div>
+            </div>
+          ))}
+        </div>
       </main>
     </div>
   );
