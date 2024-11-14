@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
+const importAll = (r) => r.keys().map(r);
+const imageFiles = importAll(require.context('../media/images', false, /\.(jpeg|jpg|png|gif)$/));
+// Import all audio files from the audio folder
+const audioFiles = importAll(require.context('../media/audio', false, /\.(mp3|wav|ogg)$/));
 
 // Example prompts; update paths according to your folder structure
 const prompts = [
-  { id: 1, type: 'image', src: require('../media/images/image1.jpeg').default },
-  { id: 2, type: 'audio', src: require('../media/audio/audio1.mp3').default },
-  { id: 3, type: 'text', content: 'What are the benefits of apples?' },
-  // Add more prompts as needed
+  ...imageFiles.map((src, index) => ({
+    id: index + 1,
+    type: 'image',
+    alt: `img${index + 1}`,
+    src,
+  })),
+  ...audioFiles.map((src, index) => ({
+    id: imageFiles.length + index + 1,
+    type: 'audio',
+    alt: `audio${index + 1}`,
+    src,
+  })),
 ];
 
 const questions = [
