@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
+// Dynamically import all images from the media folder
+const importAll = (r) => r.keys().map(r);
+const images = importAll(require.context('../media/images', false, /\.(jpeg|jpg|png|gif)$/));
+// Import all audio files from the audio folder
+const audioFiles = importAll(require.context('../media/audio', false, /\.(mp3|wav|ogg)$/));
 
-// Update paths according to your folder structure
-const visuals = [
-  { id: 1, type: 'image', src: require('../media/images/image1.jpeg').default },
-  { id: 2, type: 'image', src: require('../media/images/image2.jpeg').default },
-  { id: 3, type: 'image', src: require('../media/images/image3.jpeg').default },
-  { id: 4, type: 'image', src: require('../media/images/image4.jpeg').default },
-  // Add more visuals as needed
-];
+// Create visuals array using dynamically imported images
+const visuals = images.map((src, index) => ({
+  id: index + 1,
+  type: 'image',
+  alt: `img${index + 1}`,
+  src,
+}));
 
-const audioClips = [
-  { id: 1, type: 'audio', src: require('../media/audio/audio1.mp3').default },
-  { id: 2, type: 'audio', src: require('../media/audio/audio2.mp3').default },
-  // Add more audio clips as needed
-];
+const audioClips = audioFiles.map((src, index) => ({
+  id: index + 1,
+  type: 'audio',
+  alt: `audio${index + 1}`,
+  src,
+}));
 
 const words = [
   { id: 1, type: 'word', text: 'Apple' },
@@ -36,15 +41,23 @@ const WMCAssessment = ({updateScoresWMC}) => {
 
   const handleAnswer = (answer) => {
     const correctAnswer = items[currentIndex]?.id === items[currentIndex - n]?.id;
-    if (answer === correctAnswer) {
-      setScore((prev) => prev + 1);
-      updateScoresWMC(score + 1);
+    if (currentIndex >=2){
+      if (answer === correctAnswer) {
+        setScore((prev) => prev + 1);
+        updateScoresWMC(score + 1);
+      }
     }
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      alert(`Game over! Your score: ${score + (answer === correctAnswer ? 1 : 0)}`);
+      alert(`Game over! Your score: ${ score + (answer === correctAnswer ? 1 : 0)}`);
       // Reset for a new round or handle accordingly
+    }
+  };
+
+  const handleNext = () => {
+    if (currentIndex < 2) {
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
@@ -74,20 +87,34 @@ const WMCAssessment = ({updateScoresWMC}) => {
         )}
       </div>
 
-      <div className="flex justify-around">
-        <button 
-          onClick={() => handleAnswer(true)} 
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+      {currentIndex < 2 ? (
+        <button
+          onClick={handleNext}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
         >
+          Next
+        </button>
+      ) :(
+        <div>
+          <p className="text-lg mb-4">Is this the same object shown 2 images ago?</p>  
+
+        <div className="flex justify-around">
+          <button 
+            onClick={() => handleAnswer(true)} 
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-200"
+          >
           Yes
-        </button>
-        <button 
-          onClick={() => handleAnswer(false)} 
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
-        >
-          No
-        </button>
-      </div>
+          </button>
+          <button 
+            onClick={() => handleAnswer(false)} 
+            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+          >
+            No
+          </button>
+        </div>
+      
+        </div>
+      )}
 
       <p className="mt-4">Current Score: {score}</p>
     </div>
