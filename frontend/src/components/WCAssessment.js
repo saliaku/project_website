@@ -41,7 +41,22 @@ const words = [
   { id: 1, type: 'word', text: 'Apple', alt: 'Apple' },
   { id: 2, type: 'word', text: 'Banana', alt: 'Banana' },
   { id: 3, type: 'word', text: 'Cherry', alt: 'Cherry' },
-  { id: 4, type: 'word', text: 'Kiwi', alt: 'Kiwi'}
+  { id: 4, type: 'word', text: 'Kiwi', alt: 'Kiwi'},
+
+  { id: 5, type: 'word', text: 'APPLE', alt: 'Apple' },
+  { id: 6, type: 'word', text: 'BANANA', alt: 'Banana' },
+  { id: 7, type: 'word', text: 'CHERRY', alt: 'Cherry' },
+  { id: 8, type: 'word', text: 'KIWI', alt: 'Kiwi'},
+
+  { id: 9, type: 'word', text: 'apple', alt: 'Apple' },
+  { id: 10, type: 'word', text: 'banana', alt: 'Banana' },
+  { id: 11, type: 'word', text: 'cherry', alt: 'Cherry' },
+  { id: 12, type: 'word', text: 'kiwi', alt: 'Kiwi'},
+
+  { id: 13, type: 'word', text: 'aPpLe', alt: 'Apple' },
+  { id: 14, type: 'word', text: 'BaNaNa', alt: 'Banana' },
+  { id: 15, type: 'word', text: 'cHeRrY', alt: 'Cherry' },
+  { id: 16, type: 'word', text: 'KiwI', alt: 'Kiwi'},
   // Add more words as needed
 ];
 
