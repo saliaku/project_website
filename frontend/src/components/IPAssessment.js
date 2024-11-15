@@ -74,6 +74,11 @@ const visualQuestions = [
         options: ['Red', 'Blue', 'Green', 'Yellow'],
         correctAnswer: 'Green',
       },
+      {
+        question: 'How many shapes are there in the image?',
+        options: ['Two', 'Three', 'Four', 'Five'],
+        correctAnswer: 'Three',
+      },
   // Add other visual questions here...
 ];
 
