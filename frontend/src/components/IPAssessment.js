@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import testimage from '../media/ip_test_material/visual_test.jpeg'; // Replace with your actual image path
 import testaudio from '../media/ip_test_material/audio_test.mp3'; // Replace with your actual audio path
 
-const textRecap = `    
+const textRecap = `
+How Do We Remember Things?     
 Your brain helps you remember all kinds of things, like facts for a test or what you ate for breakfast. Memory works in three steps: first, you take in information through your senses, like seeing or hearing. This is called encoding. Next, your brain stores that information in either short-term or long-term memory. Short-term memory is like a chalkboard—it can hold things for a little while. Long-term memory is like a computer that saves things for a long time. Finally, when you need to remember something, your brain retrieves it. This means it brings the information back so you can use it. Sometimes we forget things because we didn't pay attention, or because our brain got too busy!
 `;
 
@@ -60,6 +61,19 @@ const visualQuestions = [
   { question: ' Which shape is blue?', 
       options: ['Circle', 'Triangle', 'Square', 'Rectangle'], 
       correctAnswer: 'Circle' },
+  { question: 'Which shapes are primary colors (red, blue, green)?',
+      options: ['Circle and square', 'Square and triangle', 'Triangle and circle', 'All three shapes'],
+      correctAnswer: 'Triangle and circle'},
+      {
+        question: 'What shape is in the middle of the image?',
+        options: ['Circle', 'Square', 'Triangle', 'Hexagon'],
+        correctAnswer: 'Circle',
+      },
+      {
+        question: 'What is the color of the triangle in the image?',
+        options: ['Red', 'Blue', 'Green', 'Yellow'],
+        correctAnswer: 'Green',
+      },
   // Add other visual questions here...
 ];
 
@@ -76,7 +90,7 @@ const auditoryQuestions = [
   // Add other auditory questions here...
 ];
 
-const IPAssessment = () => {
+const IPAssessment = ({updateScoresWMC}) => {
   const [currentStep, setCurrentStep] = useState('intro');
   const [currentSection, setCurrentSection] = useState('text');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -94,6 +108,7 @@ const IPAssessment = () => {
     if (currentQuestions && currentQuestionIndex < currentQuestions.length) {
       if (selectedOption === currentQuestions[currentQuestionIndex].correctAnswer) {
         setScore((prevScore) => prevScore + 1);
+        updateScoresWMC(score + 1);
         setSectionScore((prevSectionScore) => ({
           ...prevSectionScore,
           [currentSection]: prevSectionScore[currentSection] + 1,
@@ -157,7 +172,7 @@ const IPAssessment = () => {
 
         {currentStep === 'recap' && (
           <div>
-            <h2 className="text-lg font-bold mb-4">{currentSection === 'text' ? 'How Do We Remember Things?' : currentSection === 'visual' ? 'Visual Memory Test' : 'Auditory Recap'}</h2>
+            <h2 className="text-lg font-bold mb-4">{currentSection === 'text' ? 'Read passage carefully' : currentSection === 'visual' ? 'Visual Memory Test' : 'Auditory Recap'}</h2>
             <p className="mb-4">{currentSection === 'text' ? textRecap : currentSection === 'visual' ? visualRecap : auditoryRecap}</p>
             {currentSection === 'visual' && <img src={testimage} alt="Visual Memory Test" className="w-full mb-4" />}
             {currentSection === 'auditory' && (
