@@ -45,7 +45,7 @@ const ReadabilityAssessment = ({ updateScores }) => {
           onChange={(e) => setText(e.target.value)}
           rows="8"
           className="w-full p-2 border rounded-lg shadow"
-          placeholder="Write about a topic of your choice..."
+          placeholder="Write about your school in 100-120 words."
         ></textarea>
         <button
           type="submit"
