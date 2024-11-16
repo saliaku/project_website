@@ -1,38 +1,51 @@
 import React, { useState, useEffect } from 'react';
 const importAll = (r) => r.keys().map(r);
-// Ensure the paths are correct relative to `components` directory
-// Ensure paths are correct relative to `components` directory
+
+// Import images and audio files
 const rawImages = importAll(require.context('../media/images', false, /\.(jpeg|jpg|png|gif)$/));
-// Create visuals array with specific alt names for repeated shapes
-const shapes = ['triangle', 'square', 'circle','star'];
+const rawAudio = importAll(require.context('../media/audio', false, /\.(mp4|wav|ogg)$/));
+
+// Image and audio mapping logic
+const imageMapping = [
+  { range: [1, 3], alt: 'triangle' },
+  { range: [4, 6], alt: 'square' },
+  { range: [7, 9], alt: 'circle' }
+];
+
+const audioMapping = [
+  { range: [1, 3], alt: 'cycle' },
+  { range: [4, 6], alt: 'car' },
+  { range: [7, 9], alt: 'bike' },
+];
+
+// Function to get the correct alt text based on index and mapping
+const getAltText = (index, mapping) => {
+  for (let map of mapping) {
+    if (index + 1 >= map.range[0] && index + 1 <= map.range[1]) {
+      return map.alt;
+    }
+  }
+  return 'unknown';
+};
+
+// Map images with correct alt texts and log for verification
 const visuals = rawImages.map((src, index) => {
-  const imageName = src.split('/').pop();
-  // Repeat shapes in sequence: 3 triangles, 3 circles, 3 squares
-  const alt =  shapes[ Math.floor(index / 4)];
-  console.log(index, alt) ;
-  console.log(imageName);
+  const alt = getAltText(index, imageMapping);
   return {
     id: index + 1,
     type: 'image',
-    alt: alt, // Assign alt names correctly
+    alt,
     src,
-    name: imageName,
   };
 });
 
-// Ensure paths are correct relative to `components` directory
-const rawAudio = importAll(require.context('../media/audio', false, /\.(mp3|wav|ogg)$/));
-
-// Create audioClips array with specific alt names for repeated audio types
-const vehicles = ['car', 'truck', 'bike', 'cycle'];
-
+// Map audio clips with correct alt texts and log for verification
 const audioClips = rawAudio.map((src, index) => {
-  // Repeat audio types in sequence: car, truck, bike, cycle
-  const alt = vehicles[Math.floor(index / 4) % vehicles.length]; 
+  const alt = getAltText(index, audioMapping);
   return {
     id: index + 1,
     type: 'audio',
-    alt: alt, // Assign alt names correctly
+    alt,
     src,
   };
 });
@@ -60,32 +73,51 @@ const words = [
   // Add more words as needed
 ];
 
+// Function to shuffle an array
+const shuffleArray = (array, limit = 7) => {
+  return array.sort(() => Math.random() - 0.5);
+};
+
 const WMCAssessment = ({ updateScoresWMC }) => {
   const [currentTest, setCurrentTest] = useState('image'); // 'image', 'audio', 'text'
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [sectionScore, setSectionScore] = useState({ image: 0, audio: 0, text: 0 });
   const [items, setItems] = useState([]);
   const [isCompleted, setIsCompleted] = useState(false);
 
-
   useEffect(() => {
-    // Initialize items and shuffle them after assignment
-    let initialItems=[];
-    if (currentTest === 'image') {
-      initialItems = visuals.map((item) => ({ ...item })); // Copy items to avoid mutation
-    } else if (currentTest === 'audio') {
-      initialItems = audioClips.map((item) => ({ ...item })); // Copy items to avoid mutation
-    } else if (currentTest === 'text') {
-      initialItems = words.map((item) => ({ ...item })); // Copy items to avoid mutation
-    }
-    setItems(initialItems.sort(() => Math.random() - 0.5));
-  }, [currentTest]);
+   // Initialize items based on the current test type and shuffle them
+   let initialItems = [];
+   switch (currentTest) {
+     case 'image':
+       initialItems =shuffleArray([...visuals]);
+       break;
+     case 'audio':
+       initialItems = shuffleArray([...audioClips]);
+       break;
+     case 'text':
+       initialItems = shuffleArray([...words]);
+       break;
+     default:
+       initialItems = [];
+   }
+   if (initialItems.length > 0) {
+    setItems(initialItems);
+  } else {
+    console.warn(`No items found for the ${currentTest} test.`);
+  }
+ }, [currentTest]);
 
   const handleAnswer = (answer) => {
     if (currentIndex >= 2) {
       const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
       if (answer === isSameAsTwoBack) {
         setScore((prev) => prev + 1);
+        setSectionScore((prevScores) => ({
+          ...prevScores,
+          [currentTest]: prevScores[currentTest] + 1,
+        }));
         updateScoresWMC(score + 1);
       }
     }
@@ -116,11 +148,16 @@ const WMCAssessment = ({ updateScoresWMC }) => {
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
         <h1 className="text-2xl font-bold">This Section Completed</h1>
         <p className="text-xl mt-4">Go on to next test below</p>
+        <p className="text-xl mt-4">Your final scores:</p>
+        <p>Image section: {sectionScore.image} / 5</p>
+        <p>Audio section: {sectionScore.audio} / 5</p>
+        <p>Text section: {sectionScore.text} / 5</p>
+        <p>Total score: {sectionScore.image + sectionScore.audio + sectionScore.text} / 15</p>
       </div>
     );
   }
 
-  if (items.length === 0) return <p>Loading...</p>;
+  // if (items.length === 0) return <p>Loading...</p>;
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">

@@ -6,22 +6,21 @@ const rawImages = importAll(require.context('../media/images', false, /\.(jpeg|j
 // Create visuals array with specific alt names for repeated shapes
 const shapes = ['triangle', 'square', 'circle','star'];
 const visuals = rawImages.map((src, index) => {
-  const imageName = src.split('/').pop();
+  
   // Repeat shapes in sequence: 3 triangles, 3 circles, 3 squares
   const alt =  shapes[ Math.floor(index / 4)];
   console.log(index, alt) ;
-  console.log(imageName);
+  console.log(src);
   return {
     id: index + 1,
     type: 'image',
     alt: alt, // Assign alt names correctly
     src,
-    name: imageName,
   };
 });
 
 // Ensure paths are correct relative to `components` directory
-const rawAudio = importAll(require.context('../media/audio', false, /\.(mp3|wav|ogg)$/));
+const rawAudio = importAll(require.context('../media/audio', false, /\.(mp4|wav|ogg)$/));
 
 // Create audioClips array with specific alt names for repeated audio types
 const vehicles = ['car', 'truck', 'bike', 'cycle'];
