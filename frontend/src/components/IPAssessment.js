@@ -65,7 +65,7 @@ const textQuestions = [
 ];
 
 const visualRecap = `
-Look at the image provided and answer the questions based on your memory of it.
+Look carefully at the image provided and answer the questions based on your memory of it.
 `;
 
 const visualQuestions = [
@@ -130,8 +130,6 @@ const visualQuestions = [
 ];
 
 const auditoryRecap = `
-**Auditory Memory Test**
-
 Listen carefully to the audio clip and answer the questions based on what you remember hearing.
 `;
 
@@ -292,10 +290,6 @@ const IPAssessment = ({ updateScoresIP }) => {
                   Try to stay focused and avoid distractions to maximize your
                   recall ability.
                 </li>
-                <li>
-                  At the end of the test, your scores for each section and the
-                  total score will be displayed.
-                </li>
               </ul>
               Take your time and do your best—good luck!
             </div>
@@ -314,8 +308,8 @@ const IPAssessment = ({ updateScoresIP }) => {
               {currentSection === "text"
                 ? "Read passage carefully"
                 : currentSection === "visual"
-                ? "Visual Memory Test"
-                : "Auditory Recap"}
+                ? "Visual Memory"
+                : "Auditory Memory"}
             </h2>
             <p className="mb-4">
               {currentSection === "text"
