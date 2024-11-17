@@ -55,7 +55,7 @@ const LoadingScreen = ({ setLoadingComplete }) => {
       <div className="absolute bottom-5 right-5 p-4 text-white text-lg font-semibold">
         <p>Kailas B210518CS</p>
         <p>Sreeshma B210035CS</p>
-        <p>Serena B210017CS</p>
+        <p>Serena B210031CS</p>
       </div>
     </div>
   );

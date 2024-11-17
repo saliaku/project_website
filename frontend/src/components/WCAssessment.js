@@ -73,9 +73,9 @@ const words = [
   // Add more words as needed
 ];
 
-// Function to shuffle an array
+// Function to shuffle an array and limit the number of items
 const shuffleArray = (array, limit = 7) => {
-  return array.sort(() => Math.random() - 0.5);
+  return array.sort(() => Math.random() - 0.5).slice(0, limit);
 };
 
 const WMCAssessment = ({ updateScoresWMC }) => {
@@ -91,13 +91,13 @@ const WMCAssessment = ({ updateScoresWMC }) => {
    let initialItems = [];
    switch (currentTest) {
      case 'image':
-       initialItems =shuffleArray([...visuals]);
+       initialItems =shuffleArray([...visuals], 7);
        break;
      case 'audio':
-       initialItems = shuffleArray([...audioClips]);
+       initialItems = shuffleArray([...audioClips], 7);
        break;
      case 'text':
-       initialItems = shuffleArray([...words]);
+       initialItems = shuffleArray([...words], 7);
        break;
      default:
        initialItems = [];
