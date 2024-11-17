@@ -16,9 +16,13 @@ const SurveyPage = () => {
   });
 
   const sendFormDataToBackend = async () => {
+    if (!formData.name || !formData.school || !formData.rollNumber) {
+      alert('Please fill in all details & attempt the tests.');
+      return; // Prevent form submission if validation fails
+    }
+
     try {
         const response = await axios.post('http://localhost:5000/api/formdata', formData);
-
         console.log('Response from backend:', response.data);
         alert('Form data sent successfully!');
     } catch (error) {
@@ -35,6 +39,12 @@ const SurveyPage = () => {
     ipScore: 0,
   });
 
+  const [completedTests, setCompletedTests] = useState({
+    readability: false,
+    wmc: false,
+    ip: false,
+  });
+
   const [isReadabilityOpen, setReadabilityOpen] = useState(false);
   const [isWMCOpen, setWMCOpen] = useState(false);
   const [isIPOpen, setIPOpen] = useState(false);
@@ -46,16 +56,19 @@ const SurveyPage = () => {
   const updateScores = (readabilityScore) => {
     setFormData((prev) => ({ ...prev, fleschScore: readabilityScore }));
     setMetrics((prev) => ({ ...prev, readabilityScore }));
+    setCompletedTests((prev) => ({ ...prev, readability: true }));
   };
 
   const updateScoresIP = (ipScore) => {
     setFormData((prev) => ({ ...prev, ipScore: ipScore }));
     setMetrics((prev) => ({ ...prev, ipScore }));
+    setCompletedTests((prev) => ({ ...prev, ip: true }));
   };
 
   const updateScoresWMC = (wmcScore) => {
     setFormData((prev) => ({ ...prev, wmcScore: wmcScore }));
     setMetrics((prev) => ({ ...prev, wmcScore }));
+    setCompletedTests((prev) => ({ ...prev, wmc: true }));
   };
   
   const handleInputChange = (e) => {
@@ -102,7 +115,7 @@ const SurveyPage = () => {
     <li>Complete each section to the best of your ability.</li>
     <li>Do not refresh the page during the assessment.</li>
     <li>Attempt all questions in the given order.</li>
-    <li>Once you submit your response, it will be final.</li>
+    <li>Once you submit your responses, it will be final.</li>
   </ul>
 </div>
 
@@ -116,6 +129,7 @@ const SurveyPage = () => {
               value={formData.name}
               onChange={handleInputChange}
               className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+        
             />
           </label>
           <label className="block text-white mb-2">
@@ -143,7 +157,8 @@ const SurveyPage = () => {
         <div className="bg-gradient-to-r from-green-400 to-teal-500 shadow-md rounded-lg mb-4 overflow-hidden">
           <button
             className="w-full text-left px-6 py-4 font-semibold hover:bg-green-600 focus:outline-none"
-            onClick={toggleReadability}
+            onClick={() => !completedTests.readability && setReadabilityOpen(!isReadabilityOpen)}
+            disabled={completedTests.readability}
           >
             Readability Assessment
           </button>
@@ -157,7 +172,8 @@ const SurveyPage = () => {
         <div className="bg-gradient-to-r from-blue-400 to-indigo-500 shadow-md rounded-lg mb-4 overflow-hidden">
           <button
             className="w-full text-left px-6 py-4 font-semibold hover:bg-blue-600 focus:outline-none"
-            onClick={toggleWMC}
+            onClick={() => !completedTests.wmc && setWMCOpen(!isWMCOpen)}
+            disabled={completedTests.wmc}
           >
             WMC Assessment
           </button>
@@ -171,7 +187,8 @@ const SurveyPage = () => {
         <div className="bg-gradient-to-r from-indigo-400 to-purple-500 shadow-md rounded-lg mb-4 overflow-hidden">
           <button
             className="w-full text-left px-6 py-4 font-semibold hover:bg-indigo-600 focus:outline-none"
-            onClick={toggleIP}
+            onClick={() => !completedTests.ip && setIPOpen(!isIPOpen)}
+            disabled={completedTests.ip}
           >
             IP Assessment
           </button>
@@ -184,9 +201,9 @@ const SurveyPage = () => {
 
         <button
     onClick={sendFormDataToBackend}
-    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-20 rounded text-2xl font-bold center w-full"
 >
-    Submit Form Data
+    Submit
 </button>
 
       </div>
