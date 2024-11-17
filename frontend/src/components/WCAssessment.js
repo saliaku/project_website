@@ -180,13 +180,18 @@ const WMCAssessment = ({ updateScoresWMC }) => {
         )}
         {currentTest === 'audio' && items[currentIndex]?.type === 'audio' && (
           <div>
-            <audio controls className="mb-2">
+            <audio
+              key={items[currentIndex].id} // Add a unique key to force re-render
+              controls
+              className="mb-2"
+            >
               <source src={items[currentIndex].src} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
             <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p>
           </div>
         )}
+
         {currentTest === 'text' && items[currentIndex]?.type === 'word' && (
           <div>
             <p className="text-xl font-semibold">{items[currentIndex].text}</p>
