@@ -147,12 +147,12 @@ const WMCAssessment = ({ updateScoresWMC }) => {
     return (
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
         <h1 className="text-2xl font-bold">This Section Completed</h1>
-        <p className="text-xl mt-4">Go on to next test below</p>
-        <p className="text-xl mt-4">Your final scores:</p>
+        <p className="text-xl mt-4">Go on to the next test below</p>
+        {/* <p className="text-xl mt-4">Your final scores:</p>
         <p>Image section: {sectionScore.image} / 5</p>
         <p>Audio section: {sectionScore.audio} / 5</p>
         <p>Text section: {sectionScore.text} / 5</p>
-        <p>Total score: {sectionScore.image + sectionScore.audio + sectionScore.text} / 15</p>
+        <p>Total score: {sectionScore.image + sectionScore.audio + sectionScore.text} / 15</p> */}
       </div>
     );
   }
@@ -175,7 +175,7 @@ const WMCAssessment = ({ updateScoresWMC }) => {
               className="mb-2"
               onError={() => console.error('Image failed to load:', items[currentIndex].src)}
             />
-            <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p>
+            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
           </div>
         )}
         {currentTest === 'audio' && items[currentIndex]?.type === 'audio' && (
@@ -188,14 +188,14 @@ const WMCAssessment = ({ updateScoresWMC }) => {
               <source src={items[currentIndex].src} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
-            <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p>
+            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
           </div>
         )}
 
         {currentTest === 'text' && items[currentIndex]?.type === 'word' && (
           <div>
             <p className="text-xl font-semibold">{items[currentIndex].text}</p>
-            <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p>
+            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
           </div>
         )}
       </div>
@@ -230,7 +230,7 @@ const WMCAssessment = ({ updateScoresWMC }) => {
         </button>
       )}
 
-      <p className="mt-4">Current Score: {score}</p>
+      {/* <p className="mt-4">Current Score: {score}</p> */}
     </div>
   );
 };

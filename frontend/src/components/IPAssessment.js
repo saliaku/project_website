@@ -53,14 +53,14 @@ const textQuestions = [
     correctAnswer: "Long-term memory",
   },
   {
-    question: "What could help you remember a list of groceries more easily?",
+    question: "If you were designing a memory game to help students remember facts, which step of memory (as explained in the text) would you focus on enhancing the most?",
     options: [
-      "Reading the list once",
-      "Singing the items in a song",
-      "Writing it down and forgetting about it",
-      "Not thinking about the list at all",
+      "Encoding, by making the information visually appealing and interactive.",
+      "Storing, by adding multiple storage devices to the brain.",
+      "Retrieval, by ensuring students can guess the answers randomly.",
+      "Forgetting, to ensure students discard unimportant facts.",
     ],
-    correctAnswer: "Singing the items in a song",
+    correctAnswer: "Encoding, by making the information visually appealing and interactive.",
   },
 ];
 
@@ -81,48 +81,40 @@ const visualQuestions = [
   },
 
   {
-    question: " Which shape is blue?",
-    options: ["Circle", "Triangle", "Square", "Rectangle"],
-    correctAnswer: "Circle",
+    question: "What geometric property does the square have?",
+    options: ["All sides are equal", "No sides are equal", "It has no straight lines", "It has only one side"],
+    correctAnswer: "All sides are equal",
   },
 
   {
-    question: "Which shapes are primary colors (red, blue, green)?",
+    question: "Is Square a Rectangle ?",
     options: [
-      "Circle and square",
-      "Square and triangle",
-      "Triangle and circle",
-      "All three shapes",
+      "Yes",
+      "No",
     ],
-    correctAnswer: "Triangle and circle",
+    correctAnswer: "Yes",
   },
   {
-    question: "Which shapes are symmetrical?",
+    question: "Which shapes are symmetrical? (Symmetry means if you fold a shape along a line, both sides will match perfectly.)",
     options: [
       "Circle and triangle",
       "Square and circle",
       "Only the square",
       "All shapes",
     ],
-    correctAnswer: " All shapes",
+    correctAnswer: "All shapes",
   },
 
   {
-    question: " Which shape would be the most difficult to replicate freehand?",
+    question: " Which shape would be the most difficult to draw freehand?",
     options: ["square", "triangle", "circle", "All"],
     correctAnswer: "circle",
   },
 
   {
-    question: "How many shapes are there in the image?",
-    options: ["Two", "Three", "Four", "Five"],
-    correctAnswer: "Three",
-  },
-
-  {
-    question: 'Can this image be created using the shapes given',
-    options: ['True', 'False'],
-    correctAnswer: 'True', // Assuming the image shows a square, circle, and triangle
+    question: 'Can this image be created using the shapes given ?',
+    options: ['Yes', 'No'],
+    correctAnswer: 'No', // Assuming the image shows a square, circle, and triangle
     image: queimage, // Path to the image generated or created from shapes
   },
 
@@ -182,22 +174,22 @@ const auditoryQuestions = [
 
   {
     question:
-      "Which sound in the sequence is most likely to be used to grab someone’s attention immediately?",
+      "You are designing an alarm system for use during a thunderstorm. Which sound would be the least reliable for alerting people during the storm?",
     options: [
       "A car honking",
       "A high-pitched bell",
       "Thunder",
       "Birds chirping",
     ],
-    correctAnswer: "A car honking",
+    correctAnswer: "Thunder",
   },
 
   {
     question:
       " How would you use the sounds to enhance a storytelling scene about a peaceful morning turning into chaos?",
     options: [
-      " Birds chirping → Car honking → Thunder",
-      " Car honking → Birds chirping → Thunder",
+      "Birds chirping → Car honking → Thunder",
+      "Car honking → Birds chirping → Thunder",
       "Thunder → High-pitched bell → Birds chirping",
       "Thunder → High-pitched bell → Car honking",
     ],
@@ -271,8 +263,7 @@ const IPAssessment = ({ updateScoresIP }) => {
           <div>
             <h2 className="text-lg font-bold mb-4">General Instructions</h2>
             <div className="mb-4">
-              Welcome to the multi-section memory test! This test will assess
-              your ability to remember information across three sections:{" "}
+              This test will assess your ability to process information across three sections:{" "}
               <strong>Text, Visual, and Auditory</strong>. Each section includes
               multiple-choice questions (MCQs) based on the provided content.
               Follow these instructions for a successful attempt:
@@ -306,10 +297,10 @@ const IPAssessment = ({ updateScoresIP }) => {
           <div>
             <h2 className="text-lg font-bold mb-4">
               {currentSection === "text"
-                ? "Read passage carefully"
+                ? "Read the below passage carefully"
                 : currentSection === "visual"
-                ? "Visual Memory"
-                : "Auditory Memory"}
+                ? "Visual Test"
+                : "Auditory Test"}
             </h2>
             <p className="mb-4">
               {currentSection === "text"
@@ -383,9 +374,12 @@ const IPAssessment = ({ updateScoresIP }) => {
         )}
 
         {currentStep === "results" && (
-          <div className="text-center">
-            <h2 className="text-lg font-bold">Quiz Completed!</h2>
-            <p>
+          // <div className="text-center">
+             <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+               <h1 className="text-2xl font-bold">This Section Completed</h1>
+                <p className="text-xl mt-4">Go on to the next test below</p>
+         {/* </div> */}
+            {/* <p>
               Your total score: {score} out of{" "}
               {textQuestions.length +
                 visualQuestions.length +
@@ -404,7 +398,7 @@ const IPAssessment = ({ updateScoresIP }) => {
             </p>
             <p className="mt-2">
               {score >= 10 ? "Excellent memory skills!" : "Keep practicing!"}
-            </p>
+            </p> */}
           </div>
         )}
       </div>

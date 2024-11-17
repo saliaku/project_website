@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const ReadabilityAssessment = ({ updateScores }) => {
   const [text, setText] = useState('');
   const [score, setScore] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const calculateReadability = (text) => {
     const words = text.split(/\s+/).filter(word => word.length > 0).length;
@@ -29,12 +30,27 @@ const ReadabilityAssessment = ({ updateScores }) => {
     return syllables;
   };
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (text.trim() === '') {
+      alert('Please write something before submitting.');
+      return;
+    }
     const readabilityScore = calculateReadability(text);
     setScore(readabilityScore);
-    updateScores(readabilityScore);  // Update the parent component's score
+    updateScores(readabilityScore); // Update the parent component's score
+    setIsCompleted(true); // Set the completion state
   };
+
+  if (isCompleted) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+        <h1 className="text-2xl font-bold">This Section Completed</h1>
+        <p className="text-xl mt-4">Go on to the next test below</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
@@ -51,15 +67,16 @@ const ReadabilityAssessment = ({ updateScores }) => {
           type="submit"
           className="w-full bg-blue-500 text-white font-semibold py-2 rounded hover:bg-blue-600 transition duration-200"
         >
-          Assess Readability
+          Submit
         </button>
       </form>
 
-      {score !== null && (
+      {/* {score !== null && (
         <div className="mt-4">
           <h2 className="text-xl font-semibold">Readability Score: {score}</h2>
+        
         </div>
-      )}
+      )} */}
     </div>
   );
 };

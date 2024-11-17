@@ -5,8 +5,6 @@ import IPAssessment from '../components/IPAssessment';
 import "../index.css"; // Import your Tailwind CSS
 import axios from 'axios'; // Import axios if you're using it
 
-
-
 const SurveyPage = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -29,7 +27,7 @@ const SurveyPage = () => {
     }
 };
 
-  console.log(formData);
+  // console.log(formData);
 
   const [metrics, setMetrics] = useState({
     readabilityScore: 0,
@@ -92,6 +90,21 @@ const SurveyPage = () => {
   return (
     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
       <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+
+      {/* General Instructions Section */}
+      <div className="max-w-4xl mx-auto p-6 relative z-10 bg-black bg-opacity-20 rounded-lg shadow-md mb-6">
+  <h2 className="text-2xl font-bold mb-4 text-white">General Instructions</h2>
+  <p className="text-white mb-3">
+    Please read the following instructions carefully before attempting the test:
+  </p>
+  <ul className="list-disc list-inside text-white">
+    <li>Ensure you have a quiet environment to focus on the assessments.</li>
+    <li>Complete each section to the best of your ability.</li>
+    <li>Do not refresh the page during the assessment.</li>
+    <li>Attempt all questions in the given order.</li>
+    <li>Once you submit your response, it will be final.</li>
+  </ul>
+</div>
 
       <div className="max-w-4xl mx-auto p-6 relative z-10 pb-0 mb-0"> {/* Removed bottom padding */}
         <div className="space-y-6">
