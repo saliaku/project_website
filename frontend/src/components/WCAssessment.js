@@ -75,7 +75,7 @@ const words = [
 
 // Function to shuffle an array
 const shuffleArray = (array, limit = 7) => {
-  return array.sort(() => Math.random() - 0.5);
+  return array.sort(() => Math.random() - 0.5).slice(0, limit);
 };
 
 const WMCAssessment = ({ updateScoresWMC }) => {
