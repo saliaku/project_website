@@ -5,8 +5,7 @@ import queimage from "../media/ip_test_material/option3.jpg";
 
 const textRecap = `
 How Do We Remember Things?     
-Your brain helps you remember all kinds of things, like facts for a test or what you ate for breakfast. Memory works in three steps: first, you take in information through your senses, like seeing or hearing. This is called encoding. Next, your brain stores that information in either short-term or long-term memory. Short-term memory is like a chalkboard—it can hold things for a little while. Long-term memory is like a computer that saves things for a long time. Finally, when you need to remember something, your brain retrieves it. This means it brings the information back so you can use it. Sometimes we forget things because we didn't pay attention, or because our brain got too busy!
-`;
+Your brain helps you remember all kinds of things, like facts for a test or what you ate for breakfast. Memory works in three steps: first, you take in information through your senses, like seeing or hearing. This is called encoding. Next, your brain stores that information in either short-term or long-term memory. Short-term memory is like a chalkboard—it can hold things for a little while. Long-term memory is like a computer that saves things for a long time. Finally, when you need to remember something, your brain retrieves it. This means it brings the information back so you can use it. Sometimes we forget things because we didn't pay attention, or because our brain got too busy!`;
 
 const textQuestions = [
   {
@@ -225,21 +224,32 @@ const IPAssessment = ({ updateScoresIP }) => {
 
   const handleAnswerSelect = (selectedOption) => {
     const currentQuestions = getCurrentQuestions();
+    
     if (currentQuestions && currentQuestionIndex < currentQuestions.length) {
-      if (
-        selectedOption === currentQuestions[currentQuestionIndex].correctAnswer
-      ) {
+      const isCorrect = 
+        selectedOption === currentQuestions[currentQuestionIndex].correctAnswer;
+      
+      if (isCorrect) {
+        // Increment the section-specific score and update IP scores
+        setSectionScore((prevSectionScore) => {
+          const updatedScores = {
+            ...prevSectionScore,
+            [currentSection]: prevSectionScore[currentSection] + 1,
+          };
+          // Update the overall score in parent component
+          updateScoresIP(updatedScores);
+          return updatedScores;
+        });
+  
+        // Increment the total score
         setScore((prevScore) => prevScore + 1);
-        updateScoresIP(score + 1);
-        setSectionScore((prevSectionScore) => ({
-          ...prevSectionScore,
-          [currentSection]: prevSectionScore[currentSection] + 1,
-        }));
       }
-
+  
+      // Check if there are more questions in the current section
       if (currentQuestionIndex < currentQuestions.length - 1) {
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       } else {
+        // Move to the next section or show results
         if (currentSection === "text") {
           startSection("visual");
         } else if (currentSection === "visual") {
@@ -250,6 +260,7 @@ const IPAssessment = ({ updateScoresIP }) => {
       }
     }
   };
+  
 
   const getCurrentQuestions = () => {
     switch (currentSection) {

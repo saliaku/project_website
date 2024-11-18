@@ -13,8 +13,16 @@ const SurveyPage = () => {
     school: '',
     rollNumber: '',
     fleschScore: '',
-    ipScore: '',
-    wmcScore: '',
+    ipScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
+    wmcScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
   });
 
   const sendFormDataToBackend = async () => {
