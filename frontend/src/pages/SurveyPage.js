@@ -27,7 +27,7 @@ const SurveyPage = () => {
 
   const sendFormDataToBackend = async () => {
     try {
-        const response = await axios.post('http://localhost:5000/api/formdata', formData);
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/formdata`, formData);
 
         console.log('Response from backend:', response.data);
         alert('Form data sent successfully!');
@@ -36,6 +36,7 @@ const SurveyPage = () => {
         alert('Failed to send form data.');
     }
 };
+
 
   console.log(formData);
 
