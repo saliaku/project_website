@@ -145,7 +145,7 @@ const WMCAssessment = ({ updateScoresWMC }) => {
         {currentTest === 'image' && 
           'Observe each image carefully. If you believe the current shape is the same as the one shown two items ago, select "Yes". Otherwise, select "No". You may IGNORE the colour of the shape.'}
         {currentTest === 'audio' && 
-          'Listen to each audio clip attentively. If you think the current vehicle matches the one played two items ago, select "Yes". Otherwise, select "No". You may IGNORE the voice.'}
+          'Listen to each audio clip attentively. If you think the current vehicle matches the one played two items ago, select "Yes". Otherwise, select "No". You may IGNORE the voice. The audio clip can be played multiple times.'}
         {currentTest === 'text' && 
           'Read each word displayed on the screen. If the current fruit matches the one displayed two items ago, select "Yes". Otherwise, select "No". You may IGNORE the casing of the words.'}
       </p>
