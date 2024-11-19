@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors({
-    origin: 'http://localhost:3000', // Allow your frontend application
+    origin: 'https://project-website-gray.vercel.app/', // Allow your frontend application
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     credentials: true, // If cookies or auth headers are used
 }));
