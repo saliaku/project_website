@@ -109,16 +109,46 @@ const WMCAssessment = ({ updateScoresWMC }) => {
   }
  }, [currentTest]);
 
+  // const handleAnswer = (answer) => {
+  //   if (currentIndex >= 2) {
+  //     const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
+  //     if (answer === isSameAsTwoBack) {
+  //       setScore((prev) => prev + 1);
+  //       setSectionScore((prevScores) => ({
+  //         ...prevScores,
+  //         [currentTest]: prevScores[currentTest] + 1,
+  //       }));
+  //       updateScoresWMC(score + 1);
+  //     }
+  //   }
+  //   if (currentIndex < items.length - 1) {
+  //     setCurrentIndex((prev) => prev + 1);
+  //   } else {
+  //     // Proceed to the next test or end the assessment
+  //     if (currentTest === 'image') {
+  //       setCurrentTest('audio');
+  //     } else if (currentTest === 'audio') {
+  //       setCurrentTest('text');
+  //     } else {
+  //       // alert(`Assessment completed! Your total score: ${score}`);
+  //       setIsCompleted(true); // Mark the test as completed
+  //     }
+  //     setCurrentIndex(0); // Reset index for the next test
+  //   }
+  // };
   const handleAnswer = (answer) => {
     if (currentIndex >= 2) {
       const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
       if (answer === isSameAsTwoBack) {
         setScore((prev) => prev + 1);
-        setSectionScore((prevScores) => ({
-          ...prevScores,
-          [currentTest]: prevScores[currentTest] + 1,
-        }));
-        updateScoresWMC(score + 1);
+        setSectionScore((prevScores) => {
+          const updatedScores = {
+            ...prevScores,
+            [currentTest]: prevScores[currentTest] + 1,
+          };
+          updateScoresWMC(updatedScores); // Pass the updated scores
+          return updatedScores;
+        });
       }
     }
     if (currentIndex < items.length - 1) {
@@ -130,12 +160,12 @@ const WMCAssessment = ({ updateScoresWMC }) => {
       } else if (currentTest === 'audio') {
         setCurrentTest('text');
       } else {
-        // alert(`Assessment completed! Your total score: ${score}`);
         setIsCompleted(true); // Mark the test as completed
       }
       setCurrentIndex(0); // Reset index for the next test
     }
   };
+  
 
   const handleNext = () => {
     if (currentIndex < 2) {

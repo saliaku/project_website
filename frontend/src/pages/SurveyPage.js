@@ -11,8 +11,16 @@ const SurveyPage = () => {
     school: '',
     rollNumber: '',
     fleschScore: '',
-    ipScore: '',
-    wmcScore: '',
+    ipScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
+    wmcScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
   });
 
   const sendFormDataToBackend = async () => {
@@ -22,7 +30,9 @@ const SurveyPage = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:5000/api/formdata', formData);
+      
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/formdata`, formData);
+
         console.log('Response from backend:', response.data);
         alert('Form data sent successfully!');
     } catch (error) {
@@ -31,7 +41,7 @@ const SurveyPage = () => {
     }
 };
 
-  // console.log(formData);
+  console.log(formData);
 
   const [metrics, setMetrics] = useState({
     readabilityScore: 0,
