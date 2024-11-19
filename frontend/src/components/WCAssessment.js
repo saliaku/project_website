@@ -28,7 +28,7 @@ const getAltText = (index, mapping) => {
   return 'unknown';
 };
 
-// Map images with correct alt texts and log for verification
+// Map images with correct alt texts
 const visuals = rawImages.map((src, index) => {
   const alt = getAltText(index, imageMapping);
   return {
@@ -39,7 +39,7 @@ const visuals = rawImages.map((src, index) => {
   };
 });
 
-// Map audio clips with correct alt texts and log for verification
+// Map audio clips with correct alt texts
 const audioClips = rawAudio.map((src, index) => {
   const alt = getAltText(index, audioMapping);
   return {
@@ -54,23 +54,15 @@ const words = [
   { id: 1, type: 'word', text: 'Apple', alt: 'Apple' },
   { id: 2, type: 'word', text: 'Banana', alt: 'Banana' },
   { id: 3, type: 'word', text: 'Cherry', alt: 'Cherry' },
-  { id: 4, type: 'word', text: 'Kiwi', alt: 'Kiwi'},
-
+  { id: 4, type: 'word', text: 'Kiwi', alt: 'Kiwi' },
   { id: 5, type: 'word', text: 'APPLE', alt: 'Apple' },
   { id: 6, type: 'word', text: 'BANANA', alt: 'Banana' },
   { id: 7, type: 'word', text: 'CHERRY', alt: 'Cherry' },
-  { id: 8, type: 'word', text: 'KIWI', alt: 'Kiwi'},
-
+  { id: 8, type: 'word', text: 'KIWI', alt: 'Kiwi' },
   { id: 9, type: 'word', text: 'apple', alt: 'Apple' },
   { id: 10, type: 'word', text: 'banana', alt: 'Banana' },
   { id: 11, type: 'word', text: 'cherry', alt: 'Cherry' },
-  { id: 12, type: 'word', text: 'kiwi', alt: 'Kiwi'},
-
-  { id: 13, type: 'word', text: 'aPpLe', alt: 'Apple' },
-  { id: 14, type: 'word', text: 'BaNaNa', alt: 'Banana' },
-  { id: 15, type: 'word', text: 'cHeRrY', alt: 'Cherry' },
-  { id: 16, type: 'word', text: 'KiwI', alt: 'Kiwi'},
-  // Add more words as needed
+  { id: 12, type: 'word', text: 'kiwi', alt: 'Kiwi' },
 ];
 
 // Function to shuffle an array and limit the number of items
@@ -87,68 +79,34 @@ const WMCAssessment = ({ updateScoresWMC }) => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
-   // Initialize items based on the current test type and shuffle them
-   let initialItems = [];
-   switch (currentTest) {
-     case 'image':
-       initialItems =shuffleArray([...visuals], 7);
-       break;
-     case 'audio':
-       initialItems = shuffleArray([...audioClips], 7);
-       break;
-     case 'text':
-       initialItems = shuffleArray([...words], 7);
-       break;
-     default:
-       initialItems = [];
-   }
-   if (initialItems.length > 0) {
+    // Initialize items based on the current test type and shuffle them
+    let initialItems = [];
+    switch (currentTest) {
+      case 'image':
+        initialItems = shuffleArray([...visuals], 7);
+        break;
+      case 'audio':
+        initialItems = shuffleArray([...audioClips], 7);
+        break;
+      case 'text':
+        initialItems = shuffleArray([...words], 7);
+        break;
+      default:
+        initialItems = [];
+    }
     setItems(initialItems);
-  } else {
-    console.warn(`No items found for the ${currentTest} test.`);
-  }
- }, [currentTest]);
+  }, [currentTest]);
 
-  // const handleAnswer = (answer) => {
-  //   if (currentIndex >= 2) {
-  //     const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
-  //     if (answer === isSameAsTwoBack) {
-  //       setScore((prev) => prev + 1);
-  //       setSectionScore((prevScores) => ({
-  //         ...prevScores,
-  //         [currentTest]: prevScores[currentTest] + 1,
-  //       }));
-  //       updateScoresWMC(score + 1);
-  //     }
-  //   }
-  //   if (currentIndex < items.length - 1) {
-  //     setCurrentIndex((prev) => prev + 1);
-  //   } else {
-  //     // Proceed to the next test or end the assessment
-  //     if (currentTest === 'image') {
-  //       setCurrentTest('audio');
-  //     } else if (currentTest === 'audio') {
-  //       setCurrentTest('text');
-  //     } else {
-  //       // alert(`Assessment completed! Your total score: ${score}`);
-  //       setIsCompleted(true); // Mark the test as completed
-  //     }
-  //     setCurrentIndex(0); // Reset index for the next test
-  //   }
-  // };
   const handleAnswer = (answer) => {
     if (currentIndex >= 2) {
       const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
       if (answer === isSameAsTwoBack) {
         setScore((prev) => prev + 1);
-        setSectionScore((prevScores) => {
-          const updatedScores = {
-            ...prevScores,
-            [currentTest]: prevScores[currentTest] + 1,
-          };
-          updateScoresWMC(updatedScores); // Pass the updated scores
-          return updatedScores;
-        });
+        setSectionScore((prevScores) => ({
+          ...prevScores,
+          [currentTest]: prevScores[currentTest] + 1,
+        }));
+        updateScoresWMC(score + 1);
       }
     }
     if (currentIndex < items.length - 1) {
@@ -165,72 +123,59 @@ const WMCAssessment = ({ updateScoresWMC }) => {
       setCurrentIndex(0); // Reset index for the next test
     }
   };
-  
-
-  const handleNext = () => {
-    if (currentIndex < 2) {
-      setCurrentIndex((prev) => prev + 1);
-    }
-  };
 
   if (isCompleted) {
     return (
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
         <h1 className="text-2xl font-bold">This Section Completed</h1>
         <p className="text-xl mt-4">Go on to the next test below</p>
-        {/* <p className="text-xl mt-4">Your final scores:</p>
-        <p>Image section: {sectionScore.image} / 5</p>
-        <p>Audio section: {sectionScore.audio} / 5</p>
-        <p>Text section: {sectionScore.text} / 5</p>
-        <p>Total score: {sectionScore.image + sectionScore.audio + sectionScore.text} / 15</p> */}
       </div>
     );
   }
 
-  // if (items.length === 0) return <p>Loading...</p>;
-
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Working Memory Capacity Assessment</h1>
-      <h2 className="text-xl font-semibold mb-4">Current Test: {currentTest.charAt(0).toUpperCase() + currentTest.slice(1)}</h2>
-      <p className="mb-2 text-gray-700">Instructions: Observe/Listen to each item as it appears. If you believe the current item is the same as the one shown two items ago, select "Yes". Otherwise, select "No".</p>
+      <h2 className="text-xl font-semibold mb-4">
+        Current Test: {currentTest.charAt(0).toUpperCase() + currentTest.slice(1)}
+      </h2>
 
+      {/* Dynamic Instructions */}
+      <p className="mb-2 text-gray-700">
+        {currentTest === 'image' && 
+          'Observe each image carefully. If you believe the current shape is the same as the one shown two items ago, select "Yes". Otherwise, select "No". You may IGNORE the colour of the shape.'}
+        {currentTest === 'audio' && 
+          'Listen to each audio clip attentively. If you think the current vehicle matches the one played two items ago, select "Yes". Otherwise, select "No". You may IGNORE the voice.'}
+        {currentTest === 'text' && 
+          'Read each word displayed on the screen. If the current fruit matches the one displayed two items ago, select "Yes". Otherwise, select "No". You may IGNORE the casing of the words.'}
+      </p>
+
+      {/* Current Test Content */}
       <div className="mb-4">
         {currentTest === 'image' && items[currentIndex]?.type === 'image' && (
-          <div>
-            <img
-              src={items[currentIndex].src}
-              alt={items[currentIndex].alt}
-               style={{ width: '300px', height: '300px', objectFit: 'cover' }} // Uniform dimensions
-              className="mb-2"
-              onError={() => console.error('Image failed to load:', items[currentIndex].src)}
-            />
-            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
-          </div>
+          <img
+            src={items[currentIndex].src}
+            alt={items[currentIndex].alt}
+            style={{ width: '300px', height: '300px', objectFit: 'cover' }}
+            className="mb-2"
+          />
         )}
         {currentTest === 'audio' && items[currentIndex]?.type === 'audio' && (
-          <div>
-            <audio
-              key={items[currentIndex].id} // Add a unique key to force re-render
-              controls
-              className="mb-2"
-            >
-              <source src={items[currentIndex].src} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
-          </div>
+          <audio
+            key={items[currentIndex].id}
+            controls
+            className="mb-2"
+          >
+            <source src={items[currentIndex].src} type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
         )}
-
         {currentTest === 'text' && items[currentIndex]?.type === 'word' && (
-          <div>
-            <p className="text-xl font-semibold">{items[currentIndex].text}</p>
-            {/* <p className="text-sm text-gray-600">Alt: {items[currentIndex].alt}</p> */}
-          </div>
+          <p className="text-xl font-semibold">{items[currentIndex].text}</p>
         )}
       </div>
 
-
+      {/* Answer Section */}
       {currentIndex >= 2 && (
         <div>
           <p className="text-lg mb-4">Is this the same content shown 2 items ago?</p>
@@ -253,14 +198,12 @@ const WMCAssessment = ({ updateScoresWMC }) => {
 
       {currentIndex < 2 && (
         <button
-          onClick={handleNext}
+          onClick={() => setCurrentIndex((prev) => prev + 1)}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
         >
           Next
         </button>
       )}
-
-      {/* <p className="mt-4">Current Score: {score}</p> */}
     </div>
   );
 };
