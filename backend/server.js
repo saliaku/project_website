@@ -16,10 +16,13 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors({
-    origin: 'https://project-website-gray.vercel.app/', // Allow your frontend application
+    origin: ['https://project-website-gray.vercel.app', 'https://project-website-gray.vercel.app/'],  // Allow both with and without trailing slash
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     credentials: true, // If cookies or auth headers are used
 }));
+
+// Add OPTIONS handling for preflight requests
+app.options('*', cors()); // Enable pre-flight for all routes
 
 // Test route
 app.get('/', (req, res) => {
