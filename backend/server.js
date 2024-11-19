@@ -16,7 +16,7 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors({
-    origin: ['https://project-website-gray.vercel.app', 'https://project-website-gray.vercel.app/'],  // Allow both with and without trailing slash
+    origin: ['https://project-website-gray.vercel.app', 'https://project-website-gray.vercel.app/survey' , 'http://localhost:3000', ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     credentials: true, // If cookies or auth headers are used
 }));

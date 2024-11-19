@@ -25,19 +25,52 @@ const SurveyPage = () => {
 
   const sendFormDataToBackend = async () => {
     if (!formData.name || !formData.school || !formData.rollNumber) {
-      alert('Please fill in all details & attempt the tests.');
-      return; // Prevent form submission if validation fails
+        alert('Please fill in all details & attempt the tests.');
+        return;
     }
 
     try {
-      
-        const response = await axios.post(`https://kailas.kattangal.online/api/formdata`, formData);
+        // Log the data being sent
+        console.log('Sending form data:', formData);
+
+        const response = await axios.post(
+            'https://kailas.kattangal.online/api/formdata',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Add better error handling
+                validateStatus: function (status) {
+                    return status >= 200 && status < 500;
+                }
+            }
+        );
 
         console.log('Response from backend:', response.data);
-        alert('Form data sent successfully!');
+        
+        if (response.status === 201 || response.status === 200) {
+            alert('Form data sent successfully!');
+        } else {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
     } catch (error) {
-        console.error('Error sending form data:', error);
-        alert('Failed to send form data.');
+        console.error('Error details:', {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status
+        });
+        
+        let errorMessage = 'Failed to send form data. ';
+        if (error.response) {
+            errorMessage += `Server responded with: ${error.response.data?.message || error.response.status}`;
+        } else if (error.request) {
+            errorMessage += 'No response received from server.';
+        } else {
+            errorMessage += error.message;
+        }
+        
+        alert(errorMessage);
     }
 };
 
