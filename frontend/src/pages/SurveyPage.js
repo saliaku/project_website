@@ -31,7 +31,7 @@ const SurveyPage = () => {
 
     try {
       
-        const response = await axios.post(`kailas.kattangal.online/api/formdata`, formData);
+        const response = await axios.post(`https://kailas.kattangal.online/api/formdata`, formData);
 
         console.log('Response from backend:', response.data);
         alert('Form data sent successfully!');
