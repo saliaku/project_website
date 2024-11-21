@@ -102,11 +102,14 @@ const WMCAssessment = ({ updateScoresWMC }) => {
       const isSameAsTwoBack = items[currentIndex]?.alt === items[currentIndex - 2]?.alt;
       if (answer === isSameAsTwoBack) {
         setScore((prev) => prev + 1);
-        setSectionScore((prevScores) => ({
-          ...prevScores,
-          [currentTest]: prevScores[currentTest] + 1,
-        }));
-        updateScoresWMC(score + 1);
+        setSectionScore((prevScores) => {
+          const updatedScores = {
+            ...prevScores,
+            [currentTest]: prevScores[currentTest] + 1,
+          };
+          updateScoresWMC(updatedScores); // Pass the updated scores
+          return updatedScores;
+        });
       }
     }
     if (currentIndex < items.length - 1) {
