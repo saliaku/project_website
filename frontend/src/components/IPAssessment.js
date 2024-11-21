@@ -204,8 +204,8 @@ const IPAssessment = ({ updateScoresIP }) => {
   const [score, setScore] = useState(0);
   const [sectionScore, setSectionScore] = useState({
     text: 0,
-    visual: 0,
-    auditory: 0,
+    image: 0,
+    audio: 0,
   });
 
   const startSection = (section) => {
@@ -243,9 +243,9 @@ const IPAssessment = ({ updateScoresIP }) => {
       } else {
         // Move to the next section or show results
         if (currentSection === "text") {
-          startSection("visual");
-        } else if (currentSection === "visual") {
-          startSection("auditory");
+          startSection("image");
+        } else if (currentSection === "image") {
+          startSection("audio");
         } else {
           setCurrentStep("results");
         }
@@ -258,9 +258,9 @@ const IPAssessment = ({ updateScoresIP }) => {
     switch (currentSection) {
       case "text":
         return textQuestions;
-      case "visual":
+      case "image":
         return visualQuestions;
-      case "auditory":
+      case "audio":
         return auditoryQuestions;
       default:
         return [];
@@ -309,25 +309,25 @@ const IPAssessment = ({ updateScoresIP }) => {
             <h2 className="text-lg font-bold mb-4">
               {currentSection === "text"
                 ? "Read the below passage carefully"
-                : currentSection === "visual"
+                : currentSection === "image"
                 ? "Visual Test"
                 : "Auditory Test"}
             </h2>
             <p className="mb-4">
               {currentSection === "text"
                 ? textRecap
-                : currentSection === "visual"
+                : currentSection === "image"
                 ? visualRecap
                 : auditoryRecap}
             </p>
-            {currentSection === "visual" && (
+            {currentSection === "image" && (
               <img
                 src={testimage}
                 alt="Visual Memory Test"
                 className="w-full mb-4"
               />
             )}
-            {currentSection === "auditory" && (
+            {currentSection === "audio" && (
               <audio controls className="w-full mb-4">
                 <source src={testaudio} type="audio/mpeg" />
                 Your browser does not support the audio element.
