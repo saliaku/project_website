@@ -386,9 +386,9 @@ const IPAssessment = ({ updateScoresIP }) => {
 
         {currentStep === "results" && (
           // <div className="text-center">
-             <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
-               <h1 className="text-2xl font-bold">This Section Completed</h1>
-                <p className="text-xl mt-4">Go on to the next test below</p>
+          <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+          <h1 className="text-2xl font-bold">This Section Completed</h1>
+          <p className="text-xl mt-4">You may submit the form if all sections are complete.</p>
          {/* </div> */}
             {/* <p>
               Your total score: {score} out of{" "}
