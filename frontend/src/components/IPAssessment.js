@@ -68,7 +68,7 @@ Look carefully at the image provided and answer the questions based on your memo
 
 const visualQuestions = [
   {
-    question: "What shapes are in the image?",
+    question: "Which is the correct order of shapes in the image?",
     options: [
       "Circle, square, rectangle",
       "Triangle, circle, square",
