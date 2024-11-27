@@ -4,62 +4,61 @@ import testaudio from "../media/ip_test_material/audio_test.mp4"; // Replace wit
 import queimage from "../media/ip_test_material/option3.jpg"; 
 
 const textRecap = `
-How Do We Remember Things?     
-Your brain helps you remember all kinds of things, like facts for a test or what you ate for breakfast. Memory works in three steps: first, you take in information through your senses, like seeing or hearing. This is called encoding. Next, your brain stores that information in either short-term or long-term memory. Short-term memory is like a chalkboard—it can hold things for a little while. Long-term memory is like a computer that saves things for a long time. Finally, when you need to remember something, your brain retrieves it. This means it brings the information back so you can use it. Sometimes we forget things because we didn't pay attention, or because our brain got too busy!`;
+The water cycle is how water moves around the Earth. It starts when the Sun heats water in oceans, lakes, and rivers, turning it into vapor, which rises into the sky. This is called evaporation. The water vapor cools and forms clouds, a process called condensation. When the clouds get heavy, water falls back to the Earth as rain, snow, or hail—this is called precipitation. The water then flows back into rivers and oceans, ready to start the cycle again. This process helps keep plants, animals, and people alive.`;
 
 const textQuestions = [
   {
-    question: "What is the first step in remembering something?",
-    options: ["Storing", "Encoding", "Retrieving", "Forgetting"],
-    correctAnswer: "Encoding",
+    question: "What is the process called when water turns into vapor and rises into the sky?",
+    options: ["Precipitation", "Evaporation", "Condensation", "Freezing"],
+    correctAnswer: "Evaporation",
   },
   {
-    question: 'What happens during the "retrieving" step of memory?',
+    question: 'Why do clouds form in the sky?',
     options: [
-      "Your brain brings back information so you can use it.",
-      "Your brain forgets information.",
-      "Your brain stores information in short-term memory.",
-      "Your brain learns new things.",
+      "Water vapor cools and turns into clouds",
+      "The Sun heats the clouds",
+      "Rain falls and creates clouds",
+      " Clouds rise from the ground",
     ],
-    correctAnswer: "Your brain brings back information so you can use it.",
+    correctAnswer: "Water vapor cools and turns into clouds",
   },
   {
     question:
-      "If you are trying to remember your friend's phone number until you can write it down, which type of memory are you using?",
+      "On a very sunny day, which part of the water cycle is likely to happen faster?",
     options: [
-      "Long-term memory",
-      "Forgetting memory",
-      "Short-term memory",
-      "Retrieval memory",
+      " Condensation",
+      "Evaporation",
+      "Precipitation",
+      "Freezing",
     ],
-    correctAnswer: "Short-term memory",
+    correctAnswer: "Evaporation",
   },
   {
-    question: "Why might you forget something like where you put your keys?",
+    question: "What could happen to plants if there was no precipitation for a long time?",
     options: [
-      "Because your brain retrieved the information",
-      "Because you didn’t pay enough attention when putting them down",
-      "Because your long-term memory is full",
-      "Because your brain encoded the information wrong",
+      "Plants would grow taller",
+      "Plants would dry out and may die",
+      " Plants would have extra water",
+      "Plants would turn into clouds",
     ],
     correctAnswer:
-      "Because you didn’t pay enough attention when putting them down",
+      "Plants would dry out and may die",
   },
   {
     question:
-      "Which type of memory do you think is more important for remembering things over many years?",
-    options: ["Long-term memory", "Short-term memory", "Encoding", "Retrieval"],
-    correctAnswer: "Long-term memory",
+      "Why is the water cycle important for life on Earth?",
+    options: [" It creates electricity", "It keeps water clean and flowing for plants, animals, and people", "It makes the Sun shine brighter", "It helps clouds stay in the sky"],
+    correctAnswer: "It keeps water clean and flowing for plants, animals, and people",
   },
   {
-    question: "If you were designing a memory game to help students remember facts, which step of memory (as explained in the text) would you focus on enhancing the most?",
+    question: "If you were to write a story about the water cycle, what would be the best way to start?",
     options: [
-      "Encoding, by making the information visually appealing and interactive.",
-      "Storing, by adding multiple storage devices to the brain.",
-      "Retrieval, by ensuring students can guess the answers randomly.",
-      "Forgetting, to ensure students discard unimportant facts.",
+      "Describe a raindrop falling from a cloud",
+      "Begin with a water droplet in the ocean",
+      "Show plants using water to grow",
+      "Introduce a river flowing to the ocean",
     ],
-    correctAnswer: "Encoding, by making the information visually appealing and interactive.",
+    correctAnswer: "Begin with a water droplet in the ocean",
   },
 ];
 
@@ -69,7 +68,7 @@ Look carefully at the image provided and answer the questions based on your memo
 
 const visualQuestions = [
   {
-    question: "What shapes are in the image?",
+    question: "Which is the correct order of shapes in the image?",
     options: [
       "Circle, square, rectangle",
       "Triangle, circle, square",
@@ -86,7 +85,7 @@ const visualQuestions = [
   },
 
   {
-    question: "Is Square a Rectangle ?",
+    question: "Is Square a Rectangle?",
     options: [
       "Yes",
       "No",
