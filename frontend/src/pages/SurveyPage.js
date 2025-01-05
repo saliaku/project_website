@@ -29,6 +29,11 @@ const SurveyPage = () => {
         return;
     }
 
+    if (!completedTests.readability || !completedTests.wmc || !completedTests.ip) {
+      alert('Please complete all assessments (Readability, WMC, and IP) before submitting.');
+      return;
+    }
+    
     try {
         // Log the data being sent
         console.log('Sending form data:', formData);
@@ -156,6 +161,7 @@ const SurveyPage = () => {
   <ul className="list-disc list-inside text-white">
     <li>Ensure you have a quiet environment to focus on the assessments.</li>
     <li>Complete each section to the best of your ability.</li>
+    <li>Do not close a section without completing it.</li>
     <li>Do not refresh the page during the assessment.</li>
     <li>Attempt all questions in the given order.</li>
     <li>Once you submit your responses, it will be final.</li>
