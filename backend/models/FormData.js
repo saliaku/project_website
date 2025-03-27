@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const formDataSchema = mongoose.Schema(
   {
+    userid: { type: Number, required: true },
     name: { type: String, required: true },
     school: { type: String, required: true },
     rollNumber: { type: String, required: true },

@@ -6,7 +6,20 @@ import "../index.css"; // Import your Tailwind CSS
 import axios from 'axios'; // Import axios if you're using it
 
 const SurveyPage = () => {
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('userid');
+    console.log('User ID:', userId);
+    
+    if(userId) {
+        setFormData((prev) => ({ ...prev, userid: userId }));
+    }
+
+  }, []);
+
   const [formData, setFormData] = useState({
+    userid: '',
     name: '',
     school: '',
     rollNumber: '',
@@ -24,7 +37,7 @@ const SurveyPage = () => {
   });
 
   const sendFormDataToBackend = async () => {
-    if (!formData.name || !formData.school || !formData.rollNumber) {
+    if (!formData.name || !formData.school || !formData.rollNumber || !formData.userid) {
         alert('Please fill in all details & attempt the tests.');
         return;
     }

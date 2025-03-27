@@ -14,7 +14,7 @@ router.post('/', async (req, res) => {
         console.log('Received form data:', req.body);
 
         // Validate required fields
-        if (!req.body.name || !req.body.school || !req.body.rollNumber) {
+        if (!req.body.name || !req.body.school || !req.body.rollNumber || !req.body.userid) {
             return res.status(400).json({
                 success: false,
                 message: 'Missing required fields: name, school, or rollNumber'
