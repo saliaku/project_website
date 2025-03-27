@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const formDataSchema = mongoose.Schema(
+const moodleSchema = mongoose.Schema(
   {
     userid: { type: Number, required: true },
     name: { type: String, required: true },
@@ -23,4 +23,4 @@ const formDataSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('FormData', formDataSchema);
+module.exports = mongoose.model('Moodle_Model', moodleSchema);
