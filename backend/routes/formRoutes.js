@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const FormData = require('../models/FormData');
+const FormData = require('../models/Moodle_Model');
 
 // Test route to check if API is working
 router.get('/test', (req, res) => {
