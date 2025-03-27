@@ -13,7 +13,11 @@ const SurveyPage = () => {
     console.log('User ID:', userId);
     
     if(userId) {
-        setFormData((prev) => ({ ...prev, userid: userId }));
+      setFormData({ userid: userId });
+    }
+    else
+    {
+      alert('User ID not found in URL. Please provide a valid User ID.');
     }
 
   }, []);
