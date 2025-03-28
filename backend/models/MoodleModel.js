@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const moodleModelSchema = mongoose.Schema(
+const moodleSchema = mongoose.Schema(
   {
     cmid: { type: Number, required: true },
     userid: { type: Number, required: true },
