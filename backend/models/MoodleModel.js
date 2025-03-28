@@ -24,4 +24,4 @@ const moodleModelSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('MoodleModel', moodleModelSchema);
+module.exports = mongoose.model('MoodleModel', moodleSchema);
