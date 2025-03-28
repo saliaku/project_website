@@ -36,10 +36,10 @@ router.post('/', async (req, res) => {
         }
 
         // Create new form data instance
-        const moodlemodel = new FormData(req.body);
+        const formData = new MoodleModel(req.body);
 
         // Save to database
-        const savedData = await MoodleModel.save();
+        const savedData = await formData.save();
         console.log('Successfully saved form data:', savedData);
 
         // Send success response
