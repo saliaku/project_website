@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require("axios");
 const router = express.Router();
 const MoodleModel = require('../models/MoodleModel');
 
@@ -12,8 +13,11 @@ router.post('/', async (req, res) => {
     try {
         // Log the incoming request data
         console.log('Received form data:', req.body);
+        const { userid, cmid } = req.body;  // Get values from body
 
         const missingFields = [];
+        const MOODLE_URL = "https://144.24.155.112/moodle/webservice/rest/server.php";
+        const MOODLE_API_TOKEN = "594ba42e18befd7b6de28ea5e156ed7";
     
         // Check each required field and collect the missing ones
         if (!req.body.name) missingFields.push('name');
@@ -50,6 +54,25 @@ router.post('/', async (req, res) => {
             message: 'Form data saved successfully',
             data: savedData
         });
+
+
+        try {
+            const response = await axios.post(MOODLE_URL, null, {
+                params: {
+                    wstoken: MOODLE_API_TOKEN,
+                    wsfunction: "core_completion_update_activity_completion_status_manually",
+                    moodlewsrestformat: "json",
+                    cmid,
+                    completed: 1,
+                    userid
+                },
+            });
+    
+            res.json(response.data);
+        } catch (error) {
+            console.error("Error updating Moodle quiz status:", error);
+            res.status(500).json({ error: "Failed to update quiz status in Moodle" });
+        }
 
     } catch (error) {
         // Log the error for debugging
