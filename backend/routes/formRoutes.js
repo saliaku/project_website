@@ -2,6 +2,11 @@ const express = require('express');
 const axios = require("axios");
 const router = express.Router();
 const MoodleModel = require('../models/MoodleModel');
+const mysql = require("mysql2/promise"); // Using MySQL2 with async/await
+const connectDB = require('./config/db');
+const { connection } = require('mongoose');
+
+
 
 // Test route to check if API is working
 router.get('/test', (req, res) => {
@@ -13,31 +18,12 @@ router.post('/', async (req, res) => {
     try {
         // Log the incoming request data
         console.log('Received form data:', req.body);
-        const { userid, cmid } = req.body;  // Get values from body
-
+        const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
         const missingFields = [];
         const MOODLE_URL = "https://144.24.155.112/moodle/webservice/rest/server.php";
         const MOODLE_API_TOKEN = "594ba42e18befd7b6de28ea5e156ed7";
     
-        // Check each required field and collect the missing ones
-        if (!req.body.name) missingFields.push('name');
-        if (!req.body.school) missingFields.push('school');
-        if (!req.body.rollNumber) missingFields.push('rollNumber');
-        if (!req.body.userid) missingFields.push('userid');
-        if (!req.body.fleschScore) missingFields.push('fleschScore');
-        if (!req.body.ipScore) missingFields.push('ipScore');
-        if (!req.body.wmcScore) missingFields.push('wmcScore');
-
-        // Validate required fields
-        if (missingFields.length > 0) {
-            console.error('Missing required fields:', missingFields);
-            // Send error response if required fields are missing
-            return res.status(400).json({
-                success: false,
-                message: 'Missing required fields'
-            });
-        }
-
+    
         // Create new form data instance
         const moodleModel = new MoodleModel(req.body);
 
@@ -57,6 +43,35 @@ router.post('/', async (req, res) => {
 
 
         try {
+
+
+             // Insert user data into the mod_user table
+            const insertQuery = `
+            UPDATE mod_user 
+            SET 
+                flesch = ?,
+                ipv = ?,
+                ipa = ?,
+                ipt = ?,
+                wmv = ?,
+                wma = ?,
+                wmt = ?
+            WHERE userid = ?;
+                    `;
+
+            const connection = await connectDB();
+            await db.query(insertQuery, [               
+                fleschScore,          
+                ipScore.image,        
+                ipScore.audio,        
+                ipScore.text,         
+                wmcScore.image,      
+                wmcScore.audio,       
+                wmcScore.text,
+                userid         
+            ]);
+
+
             const response = await axios.post(MOODLE_URL, null, {
                 params: {
                     wstoken: MOODLE_API_TOKEN,
