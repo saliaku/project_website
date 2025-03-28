@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const FormData = require('../models/MoodleModel');
+const MoodleModel = require('../models/MoodleModel');
 
 // Test route to check if API is working
 router.get('/test', (req, res) => {
@@ -13,19 +14,32 @@ router.post('/', async (req, res) => {
         // Log the incoming request data
         console.log('Received form data:', req.body);
 
+        const missingFields = [];
+    
+        // Check each required field and collect the missing ones
+        if (!req.body.name) missingFields.push('name');
+        if (!req.body.school) missingFields.push('school');
+        if (!req.body.rollNumber) missingFields.push('rollNumber');
+        if (!req.body.userid) missingFields.push('userid');
+        if (!req.body.fleschScore) missingFields.push('fleschScore');
+        if (!req.body.ipScore) missingFields.push('ipScore');
+        if (!req.body.wmcScore) missingFields.push('wmcScore');
+
         // Validate required fields
-        if (!req.body.name || !req.body.school || !req.body.rollNumber || !req.body.userid) {
+        if (missingFields.length > 0) {
+            console.error('Missing required fields:', missingFields);
+            // Send error response if required fields are missing
             return res.status(400).json({
                 success: false,
-                message: 'Missing required fields: name, school, or rollNumber'
+                message: 'Missing required fields'
             });
         }
 
         // Create new form data instance
-        const formData = new FormData(req.body);
+        const moodlemodel = new FormData(req.body);
 
         // Save to database
-        const savedData = await formData.save();
+        const savedData = await MoodleModel.save();
         console.log('Successfully saved form data:', savedData);
 
         // Send success response
