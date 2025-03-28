@@ -16,7 +16,7 @@ const SurveyPage = () => {
     
     if(userId && cmid) {
       setFormData({ userid: userId });
-      setFormData({ cmid: cmid });
+      setFormData((prev) => ({ ...prev, cmid: cmid }));
     }
     else
     {
