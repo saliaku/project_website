@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const FormData = require('../models/MoodleModel');
 const MoodleModel = require('../models/MoodleModel');
 
 // Test route to check if API is working
@@ -36,7 +35,7 @@ router.post('/', async (req, res) => {
         }
 
         // Create new form data instance
-        const formData = new MoodleModel(req.body);
+        const formData = new  MoodleModel({req.body});
 
         // Save to database
         const savedData = await formData.save();

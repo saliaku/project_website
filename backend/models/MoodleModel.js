@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const moodleSchema = mongoose.Schema(
+const moodleModelSchema = mongoose.Schema(
   {
     cmid: { type: Number, required: true },
     userid: { type: Number, required: true },
@@ -24,4 +24,4 @@ const moodleSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Moodle_Model', moodleSchema);
+module.exports = mongoose.model('MoodleModel', moodleModelSchema);
