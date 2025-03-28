@@ -10,10 +10,13 @@ const SurveyPage = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const userId = params.get('userid');
+    const cmid = params.get('cmid');
     console.log('User ID:', userId);
+    console.log('CMID:', cmid);
     
-    if(userId) {
+    if(userId && cmid) {
       setFormData({ userid: userId });
+      setFormData({ cmid: cmid });
     }
     else
     {
@@ -23,6 +26,7 @@ const SurveyPage = () => {
   }, []);
 
   const [formData, setFormData] = useState({
+    cmid: '',
     userid: '',
     name: '',
     school: '',

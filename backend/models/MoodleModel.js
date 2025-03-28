@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const moodleSchema = mongoose.Schema(
   {
+    cmid: { type: Number, required: true },
     userid: { type: Number, required: true },
     name: { type: String, required: true },
     school: { type: String, required: true },
