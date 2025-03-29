@@ -18,10 +18,7 @@ router.post('/', async (req, res) => {
     try {
         // Log the incoming request data
         console.log('Received form data:', req.body);
-        const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
-        const missingFields = [];
-        const MOODLE_URL = "https://144.24.155.112/moodle/webservice/rest/server.php";
-    
+       
     
         // Create new form data instance
         const moodleModel = new MoodleModel(req.body);
@@ -41,52 +38,7 @@ router.post('/', async (req, res) => {
         });
 
 
-        try {
-
-
-             // Insert user data into the mod_user table
-            const insertQuery = `
-            UPDATE mod_user 
-            SET 
-                flesch = ?,
-                ipv = ?,
-                ipa = ?,
-                ipt = ?,
-                wmv = ?,
-                wma = ?,
-                wmt = ?
-            WHERE userid = ?;
-                    `;
-
-            const connection = await connectDB();
-            await db.query(insertQuery, [               
-                fleschScore,          
-                ipScore.image,        
-                ipScore.audio,        
-                ipScore.text,         
-                wmcScore.image,      
-                wmcScore.audio,       
-                wmcScore.text,
-                userid         
-            ]);
-
-
-            const response = await axios.post(MOODLE_URL, null, {
-                params: {
-                    wstoken: MOODLE_API_TOKEN,
-                    wsfunction: "core_completion_update_activity_completion_status_manually",
-                    moodlewsrestformat: "json",
-                    cmid,
-                    completed: 1,
-                    userid
-                },
-            });
-    
-            res.json(response.data);
-        } catch (error) {
-            console.error("Error updating Moodle quiz status:", error);
-            res.status(500).json({ error: "Failed to update quiz status in Moodle" });
-        }
+        
 
     } catch (error) {
         // Log the error for debugging
@@ -108,7 +60,58 @@ router.post('/', async (req, res) => {
             error: error.message
         });
     }
+
+    try {
+        const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
+        const MOODLE_URL = "https://144.24.155.112/webservice/rest/server.php";
+    
+        // Update the mdl_user table with the new assessment scores
+        const updateQuery = `
+            UPDATE mdl_user 
+            SET 
+                flesch = ?, 
+                ip_image = ?, 
+                ip_audio = ?, 
+                ip_text = ?, 
+                wm_image = ?, 
+                wm_audio = ?, 
+                wm_text = ?
+            WHERE id = ?;
+        `;
+    
+        const db = await connectDB(); // Ensure database connection is established
+        await db.query(updateQuery, [
+            fleschScore,
+            ipScore.image,
+            ipScore.audio,
+            ipScore.text,
+            wmcScore.image,
+            wmcScore.audio,
+            wmcScore.text,
+            userid // `id` in `mdl_user` represents the user
+        ]);
+    
+        // Send request to Moodle API to mark activity completion
+        const response = await axios.post(MOODLE_URL, null, {
+            params: {
+                wstoken: MOODLE_API_TOKEN,
+                wsfunction: "core_completion_update_activity_completion_status_manually",
+                moodlewsrestformat: "json",
+                cmid,
+                completed: 1,
+                userid
+            },
+        });
+    
+        res.json(response.data);
+    } catch (error) {
+        console.error("Error updating Moodle quiz status:", error);
+        res.status(500).json({ error: "Failed to update quiz status in Moodle" });
+    }
+    
 });
 
 // Export the router
 module.exports = router;
+
+
