@@ -60,7 +60,7 @@ const SurveyPage = () => {
         console.log('Sending form data:', formData);
 
         const response = await axios.post(
-            'https://68.233.115.209/api/formdata',
+            'https://kailas.kattangal.online/api/formdata',
             formData,
             {
                 headers: {

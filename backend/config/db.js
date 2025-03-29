@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const mysql = require('mysql2');  // Ensure this line is included
+const mysql = require('mysql2/promise');  // Ensure this line is included
 
 const connectDB = async () => {
     try {
@@ -16,7 +16,7 @@ const connectDB = async () => {
     //connection to moodle
     try {
         // Create a connection to the Moodle database
-        const connection = mysql.createConnection({
+        const connection = await mysql.createConnection({
             host: process.env.MYSQL_HOST,    // Database host
             user: process.env.MYSQL_USER,    // Database user
             password: process.env.MYSQL_PASSWORD, // Database password
