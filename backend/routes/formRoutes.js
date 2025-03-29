@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require("axios");
 const router = express.Router();
 const MoodleModel = require('../models/MoodleModel');
-const connectDB = require('./config/db');
+const connectDB = require('../config/db');
 
 
 // Test route to check if API is working
