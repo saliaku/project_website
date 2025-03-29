@@ -2,11 +2,6 @@ const express = require('express');
 const axios = require("axios");
 const router = express.Router();
 const MoodleModel = require('../models/MoodleModel');
-const mysql = require("mysql2/promise"); // Using MySQL2 with async/await
-const connectDB = require('./config/db');
-const { connection } = require('mongoose');
-
-
 
 // Test route to check if API is working
 router.get('/test', (req, res) => {
@@ -18,8 +13,8 @@ router.post('/', async (req, res) => {
     try {
         // Log the incoming request data
         console.log('Received form data:', req.body);
-       
-    
+
+
         // Create new form data instance
         const moodleModel = new MoodleModel(req.body);
 
@@ -38,7 +33,6 @@ router.post('/', async (req, res) => {
         });
 
 
-        
 
     } catch (error) {
         // Log the error for debugging
