@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require("axios");
 const router = express.Router();
 const MoodleModel = require('../models/MoodleModel');
+const connectDB = require('./config/db');
+
 
 // Test route to check if API is working
 router.get('/test', (req, res) => {
@@ -52,7 +54,7 @@ router.post('/', async (req, res) => {
             success: false,
             message: 'Server error while saving form data',
             error: error.message
-        });
+        });connectDB
     }
 
     try {
