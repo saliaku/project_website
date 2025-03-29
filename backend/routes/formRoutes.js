@@ -58,6 +58,8 @@ router.post('/', async (req, res) => {
     try {
         const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
         const MOODLE_URL = "https://144.24.155.112/webservice/rest/server.php";
+        const MOODLE_API_TOKEN = "594ba42e18befd7b6de28ea5e156ed7";
+
     
         // Update the mdl_user table with the new assessment scores
         const updateQuery = `
