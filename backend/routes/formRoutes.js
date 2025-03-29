@@ -68,12 +68,12 @@ router.post('/', async (req, res) => {
             UPDATE mdl_user 
             SET 
                 flesch = ?, 
-                ip_image = ?, 
-                ip_audio = ?, 
-                ip_text = ?, 
-                wm_image = ?, 
-                wm_audio = ?, 
-                wm_text = ?
+                ipv = ?, 
+                ipa = ?, 
+                ipt = ?, 
+                wmv = ?, 
+                wma = ?, 
+                wmt = ?
             WHERE id = ?;
         `;
     
