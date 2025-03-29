@@ -102,11 +102,11 @@ const SurveyPage = () => {
 
   console.log(formData);
 
-  const [metrics, setMetrics] = useState({
-    readabilityScore: 0,
-    wmcScore: 0,
-    ipScore: 0,
-  });
+  // const [metrics, setMetrics] = useState({
+  //   readabilityScore: 0,
+  //   wmcScore: 0,
+  //   ipScore: 0,
+  // });
 
   const [completedTests, setCompletedTests] = useState({
     readability: false,
@@ -118,25 +118,25 @@ const SurveyPage = () => {
   const [isWMCOpen, setWMCOpen] = useState(false);
   const [isIPOpen, setIPOpen] = useState(false);
 
-  const toggleReadability = () => setReadabilityOpen(!isReadabilityOpen);
-  const toggleWMC = () => setWMCOpen(!isWMCOpen);
-  const toggleIP = () => setIPOpen(!isIPOpen);
+  // const toggleReadability = () => setReadabilityOpen(!isReadabilityOpen);
+  // const toggleWMC = () => setWMCOpen(!isWMCOpen);
+  // const toggleIP = () => setIPOpen(!isIPOpen);
 
   const updateScores = (readabilityScore) => {
     setFormData((prev) => ({ ...prev, fleschScore: readabilityScore }));
-    setMetrics((prev) => ({ ...prev, readabilityScore }));
+    // setMetrics((prev) => ({ ...prev, readabilityScore }));
     setCompletedTests((prev) => ({ ...prev, readability: true }));
   };
 
   const updateScoresIP = (ipScore) => {
     setFormData((prev) => ({ ...prev, ipScore: ipScore }));
-    setMetrics((prev) => ({ ...prev, ipScore }));
+    // setMetrics((prev) => ({ ...prev, ipScore }));
     setCompletedTests((prev) => ({ ...prev, ip: true }));
   };
 
   const updateScoresWMC = (wmcScore) => {
     setFormData((prev) => ({ ...prev, wmcScore: wmcScore }));
-    setMetrics((prev) => ({ ...prev, wmcScore }));
+    // setMetrics((prev) => ({ ...prev, wmcScore }));
     setCompletedTests((prev) => ({ ...prev, wmc: true }));
   };
   
@@ -271,7 +271,7 @@ const SurveyPage = () => {
 
         <button
     onClick={sendFormDataToBackend}
-    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-20 rounded text-2xl font-bold center w-full"
+    className="bg-blue-500 hover:bg-blue-600 text-white  py-4 px-20 rounded text-2xl font-bold center w-full"
 >
     Submit
 </button>
