@@ -90,6 +90,7 @@ router.post('/', async (req, res) => {
         ]);
     
         // Update the mdl_user table with the new assessment scores
+        const currentTimestamp = Math.floor(Date.now() / 1000);
         const insertQuery = `
         INSERT INTO mdl_course_modules_completion (
             id,              
@@ -102,7 +103,7 @@ router.post('/', async (req, res) => {
         `;
 
         await db.query(insertQuery, [
-            cmid, userid, CURENT_TIMESTAMP
+            cmid, userid, currentTimestamp
         ]);
 
 
