@@ -89,19 +89,36 @@ router.post('/', async (req, res) => {
             userid // `id` in `mdl_user` represents the user
         ]);
     
+        // Update the mdl_user table with the new assessment scores
+        const insertQuery = `
+        INSERT INTO mdl_course_modules_completion (
+            id,              
+            coursemoduleid,  
+            userid,          
+            completionstate, 
+            timemodified     
+        ) 
+        VALUES (NULL, ?, ?, 1, ?);
+        `;
+
+        await db.query(insertQuery, [
+            cmid, userid, UNIX_TIMESTAMP()
+        ]);
+
+
         // Send request to Moodle API to mark activity completion
-        const response = await axios.post(MOODLE_URL, null, {
-            params: {
-                wstoken: MOODLE_API_TOKEN,
-                wsfunction: "core_completion_update_activity_completion_status_manually",
-                moodlewsrestformat: "json",
-                cmid,
-                completed: 1,
-                userid
-            },
-        });
+        // const response = await axios.post(MOODLE_URL, null, {
+        //     params: {
+        //         wstoken: MOODLE_API_TOKEN,
+        //         wsfunction: "core_completion_update_activity_completion_status_manually",
+        //         moodlewsrestformat: "json",
+        //         cmid,
+        //         completed: 1,
+        //         userid
+        //     },
+        // });
     
-        res.json(response.data);
+        // res.json(response.data);
     } catch (error) {
         console.error("Error updating Moodle quiz status:", error);
         res.status(500).json({ error: "Failed to update quiz status in Moodle" });
