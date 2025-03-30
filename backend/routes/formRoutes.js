@@ -95,13 +95,14 @@ router.post('/', async (req, res) => {
             id,              
             coursemoduleid,  
             userid,          
-            completionstate 
+            completionstate, 
+            timemodified     
         ) 
-        VALUES (NULL, ?, ?, 1);
+        VALUES (NULL, ?, ?, 1, ?);
         `;
 
         await db.query(insertQuery, [
-            cmid, userid
+            cmid, userid, CURENT_TIMESTAMP
         ]);
 
 
