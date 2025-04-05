@@ -120,6 +120,21 @@ router.post('/', async (req, res) => {
         // });
     
         // res.json(response.data);
+
+
+        const { exec } = require('child_process');
+
+        exec(`python3 /path/to/your/script.py ${userid}`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error running Python script: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`);
+            }
+            console.log(`Script output: ${stdout}`);
+        });
+
     } catch (error) {
         console.error("Error updating Moodle quiz status:", error);
         res.status(500).json({ error: "Failed to update quiz status in Moodle" });
