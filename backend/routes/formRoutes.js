@@ -124,7 +124,7 @@ router.post('/', async (req, res) => {
 
         const { exec } = require('child_process');
 
-        exec(`python3 /path/to/your/script.py ${userid}`, (error, stdout, stderr) => {
+        exec(`python3 /var/www/moodle/local/learningpath/script.py ${userid}`, (error, stdout, stderr) => {
             if (error) {
                 console.error(`Error running Python script: ${error.message}`);
                 return;
