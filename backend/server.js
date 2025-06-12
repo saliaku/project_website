@@ -1,26 +1,42 @@
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const connectDB = require('./config/db');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://user:asdf123@cluster0.x9kbg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// Load environment variables
+dotenv.config();
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+// Connect to MongoDB
+connectDB();
+
+const app = express();
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// Enable CORS
+app.use(cors({
+    origin: ['https://project-website-gray.vercel.app', 'https://project-website-gray.vercel.app/survey' , 'http://localhost:3000', ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+    credentials: true, // If cookies or auth headers are used
+}));
+
+// Add OPTIONS handling for preflight requests
+app.options('*', cors()); // Enable pre-flight for all routes
+
+// Test route
+app.get('/', (req, res) => {
+    res.send('API is running...');
 });
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+// Import and use your routes
+const formRoutes = require('./routes/formRoutes');
+app.use('/api/formdata', formRoutes);
+
+// Set the port from environment variables or default to 5000
+const PORT = process.env.PORT || 5000;
+
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

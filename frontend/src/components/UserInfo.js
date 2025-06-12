@@ -25,6 +25,7 @@ const UserInfo = ({ onFormComplete }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+    
         console.log('Form Data:', formData);
         // You can add further form submission logic here
     };

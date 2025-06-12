@@ -1,1 +1,8 @@
 node_modules
+.vscode
+Dockerfile
+backend/docker-compose.yml
+backend/.docker-compose.yml.swp
+backend/Dockerfile
+backend/.env
+backend/.env
