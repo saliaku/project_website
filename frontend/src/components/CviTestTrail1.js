@@ -1,173 +1,165 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const importAll = (r) => r.keys().map(r);
+const colorOptions = ['black', 'pink'];
+const matching = colorOptions[0];
+const different = colorOptions[1];
 
-const rawImages = importAll(require.context('../media/cvi_test_material', false, /\.(jpeg|jpg|png|gif)$/));
+// CviTest Component
+const CviTest = () => {
+  // Generate a set of cards with black ones placed at random positions
+  // total = 12 cards
+  // 3 or 4 will be black
+  const [cards, setCards] = useState([]);
 
-const rows = 4;
-const cols = 4;
-const totalCells = rows * cols;
+  const [selected, setSelected] = useState([]);
 
-const colorOptions = ['red', 'blue', 'green', 'orange', 'purple', 'yellow'];
-const imageOptions = {
-  red: 'red.jpeg',
-  blue: 'blue.jpeg',
-  green: 'green.jpeg',
-  orange: 'orange.jpeg',
-  purple: 'purple.jpeg',
-  yellow: 'yellow.jpeg',
-};
+  const [oddCardIndices, setOddCardIndices] = useState([]);
 
-const getRandomElements = (arr, n) => {
-  const shuffled = [...arr].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, n);
-};
+  // const [userid, setUserid] = useState(null);
 
-const generateGrid = () => {
-  const numPairs = 6; // adjust as needed
-  const selectedColors = getRandomElements(Object.keys(imageOptions), numPairs);
-
-  const pairs = selectedColors.map((color) => ({
-    color,
-    image: imageOptions[color],
-    matched: false,
-  }));
-
-  const grid = Array(totalCells).fill(null);
-  const availableIndices = [...Array(totalCells).keys()];
-
-  pairs.forEach((pair) => {
-    const imageIndex = availableIndices.splice(
-      Math.floor(Math.random() * availableIndices.length),
-      1
-    )[0];
-    const colorIndex = availableIndices.splice(
-      Math.floor(Math.random() * availableIndices.length),
-      1
-    )[0];
-
-    grid[imageIndex] = { type: 'image', value: pair.image, color: pair.color, matched: false };
-    grid[colorIndex] = { type: 'color', value: pair.color, matched: false };
-  });
-
-  return { grid, pairs };
-};
-
-const CVITest = ({ updateScoresCVI }) => {
-  const [gridData, setGridData] = useState([]);
-  const [pairs, setPairs] = useState([]);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [mouseTrail, setMouseTrail] = useState([]);
-  const [matchedCount, setMatchedCount] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const { grid, pairs } = generateGrid();
-    setGridData(grid);
-    setPairs(pairs);
-  }, []);
-
-  useEffect(() => {
-    const trackMouse = (e) => {
-      setMouseTrail((prev) => [...prev, { x: e.clientX, y: e.clientY }]);
-    };
-    document.addEventListener('mousemove', trackMouse);
-    return () => document.removeEventListener('mousemove', trackMouse);
-  }, []);
-
-  const handleCellClick = (cell, index) => {
-    if (!cell || cell.matched) return;
-
-    if (!selectedCell) {
-      setSelectedCell({ ...cell, index });
+    if (!location.state) {
+      console.error("No state passed to CviTest.");
+      navigate('/three_tests'); // fallback
       return;
     }
 
-    if (selectedCell.index === index) return; // avoid selecting the same cell
 
-    const isValidMatch =
-      (selectedCell.type === 'image' && cell.type === 'color' && selectedCell.color === cell.value) ||
-      (selectedCell.type === 'color' && cell.type === 'image' && selectedCell.value === cell.color);
+    // Generate cards
+    if (cards.length === 0) {
+      const newCards = [];
 
-    if (isValidMatch) {
-      const newCount = matchedCount + 1;
-      const newGrid = [...gridData];
+      // number of black cards
+      const numberOfCards = 45;
 
-      newGrid[selectedCell.index].matched = true;
-      newGrid[index].matched = true;
+      // positions for black cards
+      const blackIndices = [0, 8, 13, 20, 24, 31, 36, 44];
+      setOddCardIndices(blackIndices);
 
-      setGridData(newGrid);
-      setMatchedCount(newCount);
-      setSelectedCell(null);
-
-      if (newCount === pairs.length) {
-        setIsCompleted(true);
+      for (let i = 0; i < numberOfCards; i++) {
+        if (blackIndices.includes(i)) {
+          newCards.push({ color: different, isOdd: true });
+        } else {
+          newCards.push({ color: matching, isOdd: false });
+        }
       }
-    } 
-     else {
-      //  alert('Wrong match!');
-      setSelectedCell(null);
+
+      setCards(newCards);
     }
+  }, [location.state, navigate,  cards.length]);
+
+  if (!location.state) return null;
+
+  const handleSelect = (index) => {
+    setSelected((prev) =>
+      prev.includes(index) ? prev.filter((item) => item !== index) : [...prev, index]
+    );
   };
 
-  const handleSubmit = () => {
-    if (!isCompleted) {
-      alert('Please finish all matches before submitting.');
-      return;
-    }
+  const handleSubmit = async () => {
+    let correct = 0;
 
-    const focusedArea = mouseTrail.length; // Simplified metric
-    updateScoresCVI({
-      score: matchedCount,
-      mouseTrail,
-      focusedArea,
+    selected.forEach((selectedIdx) => {
+      if (oddCardIndices.includes(selectedIdx)) correct++;
     });
 
-    alert('Test submitted! Check console for results.');
+    // Calculate max and min index for black cards that were correct
+    const correctBlackSelections = selected.filter((selectedIdx) =>
+      oddCardIndices.includes(selectedIdx)
+    );
+
+    let maxIdx = null;
+    let minIdx = null;
+
+    if (correctBlackSelections.length > 0) {
+      maxIdx = Math.max(...correctBlackSelections);
+      minIdx = Math.min(...correctBlackSelections);
+      console.log("Max black card index (for backend):", maxIdx);
+      console.log("Min black card index (for backend):", minIdx);
+    } else {
+      alert("No black cards were correctly identified.");
+    }
+
+    // Prepare data to send to backend
+    const cvi_submission ={
+        score: correct,
+        total: oddCardIndices.length,
+        maxIdx,
+        minIdx,
+      };
+
+    try {
+      console.log("Submitting to backend.", cvi_submission);
+      // Send to backend with axios
+      const response = await axios.post(
+        "https://kailas.kattangal.online/api/formdata/cvi",
+        cvi_submission,
+        {
+          headers: { "Content-Type": "application/json" },
+          validateStatus: function (status) {
+            return status >= 200 && status < 500;
+          },
+        }
+      );
+      console.log("POST response.", response);
+      if (response.status >= 200 && response.status < 300) {
+        console.log("CVI data successfully submitted.");
+        // If submission is successful, navigate to the next page
+        navigate('/three_tests'); // Change this to your route
+      } else {
+        console.error("Failed to submit data.", response);
+        alert("Failed to submit data.");
+      }
+    } catch (error) {
+      console.error("Error while submitting to backend.", error);
+      alert("Error while submitting.");
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-4">Color Vision Match Test</h1>
-
-      <div className="grid grid-cols-4 gap-2">
-        {gridData.map((cell, index) => (
-          <div
-            key={index}
-            onClick={() => handleCellClick(cell, index)}
-            className={`w-24 h-24 border-2 rounded flex items-center justify-center cursor-pointer transition
-              ${cell?.matched ? 'opacity-50 cursor-default' : ''}
-              ${selectedCell?.index === index ? 'border-blue-500' : 'border-gray-300'}
-            `}
-            style={{ backgroundColor: cell?.type === 'color' ? cell.value : 'white' }}
-          >
-            {cell?.type === 'image' && (
-              <img
-                src={require(`../media/cvi_test_material/${cell.value}`)}
-                alt=""
-                className="max-h-20 max-w-20"
-              />
-            )}
-          </div>
-        ))}
+    <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-auto min-h-screen p-6">
+      <div className="max-w-7xl mx-auto p-6 relative z-10 bg-black bg-opacity-20 rounded-lg shadow-md mb-6">
+        <h2 className="text-2xl font-semibold mb-4 text-gray-50">Find the Odd One Out</h2>
+        <p className="text-gray-50 mb-4">
+          Please select all the ODD cards you think are different from the rest.
+          Please scroll down to submit this test and move on to the next page.
+        </p>  
       </div>
 
-      <div className="mt-6 text-center">
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-500 text-white font-semibold px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Submit
-        </button>
+      {/* Grid of cards */}
+      <div className="flex-grow px-4 py-2">
+        {/* Grid with 5 columns — row heights will grow naturally based on their content */}
+        <div className="grid grid-cols-9 gap-4">
+          {cards.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={() => handleSelect(idx)}
+              className={`rounded-md border-4 ${
+                selected.includes(idx) ? "border-pink-500" : "border-gray-500"
+              }`}
+              style={{ backgroundColor: item.color, cursor:'pointer', height:'100px' }}>
+            </div>
+          ))}
+        </div>
+
+        {/* Submit Button directly after grid */}
+        <div className="text-center mt-6">
+          <button
+            onClick={handleSubmit}
+            disabled={selected.length === 0}
+            className="bg-blue-500 hover:bg-blue-600 text-gray-50 py-4 px-20 rounded text-2xl font-semibold">
+            Submit
+          </button>
+        </div>
       </div>
 
-      {isCompleted && (
-        <p className="text-green-600 font-bold mt-4 text-center">
-          All matches completed!
-        </p>
-      )}
     </div>
   );
 };
 
-export default CVITest;
+export default CviTest;

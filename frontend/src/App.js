@@ -6,6 +6,8 @@ import Footer from "./components/Footer";
 import LandingPage from "./pages/LandingPage";
 import LoadingScreen from "./pages/LoadingScreen";
 import SurveyPage from "./pages/SurveyPage";
+import CviTest from "./components/CviTest";
+import ThreeTests from "./components/ThreeTests";
 
 function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -19,10 +21,14 @@ function App() {
           <>
             <Header />
             <main className="flex-grow">
+      
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/survey" element={<SurveyPage />} />
+                <Route path="/cvitest" element={<CviTest />} />
+                <Route path="/three_tests" element={<ThreeTests />} />
               </Routes>
+        
             </main>
             <Footer />
           </>
