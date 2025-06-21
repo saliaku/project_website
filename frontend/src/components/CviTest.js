@@ -5,22 +5,29 @@ const colorOptions = ['black', 'pink'];
 const matching = colorOptions[0];
 const different = colorOptions[1];
 
-// The matching color is pink
-// The different (odd) color is black
+// 1: top
+// 2: bottom 
+// 3: left
+// 4: right
+
+// 5: topLeft
+// 6: topRight
+// 7: bottomLeft
+// 8: bottomRight
+
+// 9: center
+// 10: All
+
+// The matching color is black
+// The odd (target) tiles are pink
 
 const CviTest = () => {
-  // Generate a set of cards with black ones placed at random positions
-  // total = 45 cards
-  // 8 black cards
   const [cards, setCards] = useState([]);
-
   const [selected, setSelected] = useState([]);
-
   const [oddCardIndices, setOddCardIndices] = useState([]);
 
   const location = useLocation();
   const navigate = useNavigate();
-  
 
   useEffect(() => {
     if (!location.state) {
@@ -30,16 +37,14 @@ const CviTest = () => {
 
     if (cards.length === 0) {
       const newCards = [];
+      const numberOfCards = 48;
 
-      // number of black cards
-      const numberOfCards = 45;
-
-      // positions for black cards
-      const blackIndices = [0, 8, 13, 20, 24, 31, 36, 44];
-      setOddCardIndices(blackIndices);
+      // Indices for odd (target) tiles
+      const oddIndices = [0, 7, 10, 13, 19, 20, 27, 28, 34, 37, 40, 47];
+      setOddCardIndices(oddIndices);
 
       for (let i = 0; i < numberOfCards; i++) {
-        if (blackIndices.includes(i)) {
+        if (oddIndices.includes(i)) {
           newCards.push({ color: different, isOdd: true });
         } else {
           newCards.push({ color: matching, isOdd: false });
@@ -48,104 +53,132 @@ const CviTest = () => {
 
       setCards(newCards);
     }
-  }, [cards.length]);
-
-
-  const findRegion = (correctBlackSelections, numCols = 9) => {
-  let left = 0;
-  let right = 0;
-  let top = 0;
-  let bottom = 0;
-
-  correctBlackSelections.forEach((idx) => {
-    const row = Math.floor(idx / numCols);
-    const col = idx % numCols;
-
-    if (col < numCols / 2) left++;
-    else right++;
-
-    if (row < Math.floor((45) / 2 / numCols)) top++;
-    else bottom++;
-  });
-
-  if (left > right && top > bottom) return "Top Left";
-  if (left > right && bottom > top) return "Bottom Left";
-  if (right > left && top > bottom) return "Top Right";
-  if (right > left && bottom > top) return "Bottom Right";
-
-  if (left > right && top == bottom) return "Left";
-  if (right > left && top == bottom) return "Right";
-
-  if (top > bottom && left == right) return "Top";
-  if (top < bottom && left == right) return "Bottom";
-
-  return "Bottom";
-};
-
-
-
+  }, [location.state, cards.length]);
 
   const handleSelect = (index) => {
     setSelected((prev) =>
       prev.includes(index) ? prev.filter((item) => item !== index) : [...prev, index]
     );
   };
+const handleSubmit = () => {
+  let correct = 0;
 
-  const handleSubmit = () => {
-    let correct = 0;
+  const totalClicked = selected.length;
 
-    selected.forEach((selectedIdx) => {
-      if (oddCardIndices.includes(selectedIdx)) correct++;
-    });
+  selected.forEach((selectedIdx) => {
+    if (oddCardIndices.includes(selectedIdx)) correct++;
+  });
 
-     const correctBlackSelections = selected.filter((selectedIdx) =>
-      oddCardIndices.includes(selectedIdx)
-    );
+  const correctOddSelections = selected.filter((selectedIdx) =>
+    oddCardIndices.includes(selectedIdx)
+  );
 
+  const wrongSelections = selected.filter((index) => 
+    !oddCardIndices.includes(index)
+  );
+  const wrongClicked = wrongSelections.length;
 
-
-    let maxIdx = null;
-    let minIdx = null;
-
-    if (correctBlackSelections.length > 0) {
-      maxIdx = Math.max(...correctBlackSelections);
-      minIdx = Math.min(...correctBlackSelections);
-      console.log("Max black card index (for backend):", maxIdx);
-      console.log("Min black card index (for backend):", minIdx);
-      // alert(`${maxIdx}, ${minIdx}`)
-    } else {
-      alert("No black cards were correctly identified.");
-    }
-// Determine visible region
-    const visibleRegion = findRegion(correctBlackSelections);
-    alert(`${visibleRegion}`);
-    // Prepare data to send to backend
-    const cvi_submission = {
-      score: correct,
-      total: oddCardIndices.length,
-      maxIdx,
-      minIdx,
-      visibleRegion,
-    };
-    
-    console.log("Submitting to backend.", cvi_submission);
-    //  navigate('/three_tests'); 
+  const quadrantClicks = {
+    topLeft: 0,
+    topRight: 0,
+    bottomLeft: 0,
+    bottomRight: 0,
+    center: 0,
   };
+
+  const numCols = 8;
+  const numRows = 6;
+
+  selected.forEach((index) => {
+    const row = Math.floor(index / numCols);
+    const col = index % numCols;
+
+    if (row < numRows / 2 && col < numCols / 2) quadrantClicks.topLeft++;
+    else if (row < numRows / 2 && col >= numCols / 2) quadrantClicks.topRight++;
+    else if (row >= numRows / 2 && col < numCols / 2) quadrantClicks.bottomLeft++;
+    else if (row >= numRows / 2 && col >= numCols / 2) quadrantClicks.bottomRight++;
+
+    if (row >= 1 && row <= 4 && col >= 2 && col <= 5) {
+      quadrantClicks.center++;
+    }
+  });
+
+  // Determine final quadrant code
+  const regionCodes = {
+    top: 1,
+    bottom: 2,
+    left: 3,
+    right: 4,
+    topLeft: 5,
+    topRight: 6,
+    bottomLeft: 7,
+    bottomRight: 8,
+    center: 9,
+    allEqual: 10,
+  };
+
+  const { topLeft, topRight, bottomLeft, bottomRight, center } = quadrantClicks;
+
+  const top = topLeft + topRight;
+  const bottom = bottomLeft + bottomRight;
+  const left = topLeft + bottomLeft;
+  const right = topRight + bottomRight;
+
+  const regionCounts = {
+    [regionCodes.topLeft]: topLeft,
+    [regionCodes.topRight]: topRight,
+    [regionCodes.bottomLeft]: bottomLeft,
+    [regionCodes.bottomRight]: bottomRight,
+    [regionCodes.center]: center,
+    [regionCodes.top]: top,
+    [regionCodes.bottom]: bottom,
+    [regionCodes.left]: left,
+    [regionCodes.right]: right,
+  };
+
+  // Get region with max count
+  const maxCount = Math.max(...Object.values(regionCounts));
+  const maxRegions = Object.keys(regionCounts).filter(
+    (key) => regionCounts[key] === maxCount
+  );
+
+  let finalQuadrantCode;
+
+  if (maxRegions.length === 1) {
+    finalQuadrantCode = parseInt(maxRegions[0]);
+  } else {
+    finalQuadrantCode = regionCodes.allEqual;
+  }
+
+  // alert(
+  //   correctOddSelections.length > 0
+  //     ? `${correctOddSelections.length} odd tiles were correctly identified.\nFinal Quadrant Code: ${finalQuadrantCode}`
+  //     : `No odd tiles were correctly identified.\nFinal Quadrant Code: ${finalQuadrantCode}`
+  // );
+
+  const cvi_submission = {
+    finalScore: correct,
+    totalClicks: totalClicked,
+    wrongSelect: wrongClicked,
+    finalQuadrantCode,
+  };
+
+  console.log("Submitting to backend.", cvi_submission);
+  // navigate('/three_tests');
+};
 
   return (
     <div className="bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-auto min-h-screen p-6">
       <div className="max-w-7xl mx-auto p-6 relative z-10 bg-black bg-opacity-20 rounded-lg shadow-md mb-6">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-50">Find the Odd One Out</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-gray-50">Pick the Pink Color Tiles</h2>
         <p className="text-gray-50 mb-4">
           Please select all the ODD cards you think are different from the rest.
           Please scroll down to submit this test and move on to the next page.
-        </p>  
+        </p>
       </div>
 
-      {/* Grid of cards */}
       <div className="flex-grow px-4 py-2">
-        {/* Grid with 5 columns — row heights will grow naturally based on their content */}
-        <div className="grid grid-cols-9 gap-4">
+        <div className="grid grid-cols-8 gap-4">
           {cards.map((item, idx) => (
             <div
               key={idx}
@@ -153,22 +186,21 @@ const CviTest = () => {
               className={`rounded-md border-4 ${
                 selected.includes(idx) ? "border-pink-500" : "border-gray-500"
               }`}
-              style={{ backgroundColor: item.color, cursor:'pointer', height:'100px' }}>
-            </div>
+              style={{ backgroundColor: item.color, cursor: 'pointer', height: '100px' }}
+            ></div>
           ))}
         </div>
 
-        {/* Submit Button directly after grid */}
         <div className="text-center mt-6">
           <button
             onClick={handleSubmit}
             disabled={selected.length === 0}
-            className="bg-blue-500 hover:bg-blue-600 text-gray-50 py-4 px-20 rounded text-2xl font-semibold">
+            className="bg-blue-500 hover:bg-blue-600 text-gray-50 py-4 px-20 rounded text-2xl font-semibold"
+          >
             Submit
           </button>
         </div>
       </div>
-
     </div>
   );
 };
