@@ -6,6 +6,26 @@ import "../index.css"; // Import your Tailwind CSS
 import axios from 'axios'; // Import axios if you're using it
 
 const SurveyPage = () => {
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('userid');
+    const cmid = params.get('cmid');
+    console.log('User ID:', userId);
+    console.log('CMID:', cmid);
+
+    if(userId && cmid) {
+      setFormData({ userid: userId });
+      setFormData((prev) => ({ ...prev, cmid: cmid }));
+    }
+    else
+    {
+      alert('User ID not found in URL. Please provide a valid User ID.');
+    }
+
+  }, []);
+
+
   const [formData, setFormData] = useState({
     name: '',
     school: '',

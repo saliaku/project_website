@@ -172,7 +172,7 @@ const handleSubmit = () => {
       <div className="max-w-7xl mx-auto p-6 relative z-10 bg-black bg-opacity-20 rounded-lg shadow-md mb-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-50">Pick the Pink Color Tiles</h2>
         <p className="text-gray-50 mb-4">
-          Please select all the ODD cards you think are different from the rest.
+          Please select all the PINK TILES as accurately as possible.
           Please scroll down to submit this test and move on to the next page.
         </p>
       </div>
