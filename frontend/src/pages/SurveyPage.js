@@ -68,6 +68,13 @@ const SurveyPage = () => {
     return { v: parseFloat(v.toFixed(3)), a: parseFloat(a.toFixed(3)), t: parseFloat(t.toFixed(3)) };
   };
 
+   useEffect(() => {
+    if (completedTests.readability && completedTests.wmc && completedTests.ip) {
+      const vat = calculateVATScores();
+      setFormData((prev) => ({ ...prev, vatScore: vat }));
+    }
+  }, [completedTests]);
+
   const sendFormDataToBackend = async () => {
     if (!formData.name || !formData.school || !formData.rollNumber) {
         alert('Please fill in all details & attempt the tests.');
@@ -79,16 +86,14 @@ const SurveyPage = () => {
       return;
     }
 
-    // Calculate and set VAT score before submission
-    const vat = calculateVATScores();
-    setFormData((prev) => ({ ...prev, vatScore: vat }));
+
     
     try {
-      console.log('Sending form data:', { ...formData, vatScore: vat });
+      console.log('Sending form data:', { ...formData });
 
       const response = await axios.post(
         'https://kailas.kattangal.online/api/formdata',
-        { ...formData, vatScore: vat },
+        formData, 
         {
           headers: { 'Content-Type': 'application/json' },
           validateStatus: (status) => status >= 200 && status < 500,
