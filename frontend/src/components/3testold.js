@@ -4,17 +4,12 @@ import WMCAssessment from '../components/WCAssessment';
 import IPAssessment from '../components/IPAssessment';
 import axios from 'axios'; // Import axios if you're using it
 import "../index.css"; // Import your Tailwind CSS
-import { useLocation ,useNavigate} from "react-router-dom";
-import {calculateVATScores} from '../components/vat_calc';
+
 
 const ThreeTests = () => {
-  const navigate = useNavigate();
-  const location = useLocation();  // ✅ correct position
-  const incomingFormData = location.state || {};
 
     const [formData, setFormData] = useState({
-            ...incomingFormData, // include data from previous pages
-
+        
         fleschScore: '',
         ipScore: {
           image: 0,
@@ -26,85 +21,34 @@ const ThreeTests = () => {
           audio: 0,
           text: 0,
         },
-        vatScore:{
-          v:0,
-          a:0,
-          t:0,
-        },
         
       });
 
     
-    // const [metrics, setMetrics] = useState({
-    //     readabilityScore: 0,
-    //     wmcScore: 0,
-    //     ipScore: 0,
-    //     vatScore: 0,
-    //   });
+    const [metrics, setMetrics] = useState({
+        readabilityScore: 0,
+        wmcScore: 0,
+        ipScore: 0,
+        cviScore: 0,
+      });
     
     const [completedTests, setCompletedTests] = useState({
         readability: false,
         wmc: false,
         ip: false,
-        vat: false,
+        cvi: false,
       });
 
-
-//    const calculateVATScores = () => {
-//     const { wmcScore, ipScore } = formData;
-
-//     const wmv = wmcScore.image;
-//     const wma = wmcScore.audio;
-//     const wmt = wmcScore.text;
-//     const ipv = ipScore.image;
-//     const ipa = ipScore.audio;
-//     const ipt = ipScore.text;
-
-//     const S = wmv + wma + wmt + ipv + ipa + ipt;
-
-//     if (S === 0) return { v: 0, a: 0, t: 0 };
-
-//     const v = (wmv + ipv) / S;
-//     const a = (wma + ipa) / S;
-//     const t = (wmt + ipt) / S;
-
-//     return { v: parseFloat(v.toFixed(3)), a: parseFloat(a.toFixed(3)), t: parseFloat(t.toFixed(3)) };
-//   };
-  
-// useEffect(() => {
-//   if (
-//     completedTests.readability &&
-//     completedTests.wmc &&
-//     completedTests.ip &&
-//     !completedTests.vat // new flag
-//   ) {
-//     const vat = calculateVATScores();
-//     setFormData((prev) => ({ ...prev, vatScore: vat }));
-//     setCompletedTests((prev) => ({ ...prev, vat: true })); // prevent re-runs
-//   }
-  
-// }, [completedTests]);
-
-// useEffect(() => {
-//   if (completedTests.vat) {
-//     console.log("✅ Final formData with VAT calculated:", formData);
-//   }
-// }, [completedTests.vat, formData]);
-
-
-    const sendFormDataToBackend = async () => {
+     const sendFormDataToBackend = async () => {
     
     if (!completedTests.readability || !completedTests.wmc || !completedTests.ip) {
       alert('Please complete all assessments (Readability, WMC, and IP) before submitting.');
       return;
     }
     
-    navigate('/thankyou');
-    
     try {
-
         // Log the data being sent
-        console.log('Sending form data to backend:', formData);
+        console.log('Sending form data:', formData);
 
         const response = await axios.post(
             'https://kailas.kattangal.online/api/formdata',
@@ -124,7 +68,6 @@ const ThreeTests = () => {
         
         if (response.status === 201 || response.status === 200) {
             alert('Form data sent successfully!');
-            navigate('/thankyou');
         } else {
             throw new Error(`Server responded with status ${response.status}`);
         }
@@ -148,71 +91,36 @@ const ThreeTests = () => {
     }
 };
 
-    console.log(formData);
-
+  console.log(formData);
     
-  const [isReadabilityOpen, setReadabilityOpen] = useState(false);
-  const [isWMCOpen, setWMCOpen] = useState(false);
-  const [isIPOpen, setIPOpen] = useState(false);
+    const [isReadabilityOpen, setReadabilityOpen] = useState(false);
+    const [isWMCOpen, setWMCOpen] = useState(false);
+    const [isIPOpen, setIPOpen] = useState(false);
     
-  const toggleReadability = () => setReadabilityOpen(!isReadabilityOpen);
-  const toggleWMC = () => setWMCOpen(!isWMCOpen);
-  const toggleIP = () => setIPOpen(!isIPOpen);
+    const toggleReadability = () => setReadabilityOpen(!isReadabilityOpen);
+    const toggleWMC = () => setWMCOpen(!isWMCOpen);
+    const toggleIP = () => setIPOpen(!isIPOpen);
 
     
   const updateScores = (readabilityScore) => {
     setFormData((prev) => ({ ...prev, fleschScore: readabilityScore }));
     // setMetrics((prev) => ({ ...prev, readabilityScore }));
-    // setCompletedTests((prev) => ({ ...prev, readability: true }));
+    setCompletedTests((prev) => ({ ...prev, readability: true }));
   };
 
   const updateScoresIP = (ipScore) => {
     setFormData((prev) => ({ ...prev, ipScore: ipScore }));
     // setMetrics((prev) => ({ ...prev, ipScore }));
-    // setCompletedTests((prev) => ({ ...prev, ip: true }));
+    setCompletedTests((prev) => ({ ...prev, ip: true }));
   };
 
   const updateScoresWMC = (wmcScore) => {
     setFormData((prev) => ({ ...prev, wmcScore: wmcScore }));
     // setMetrics((prev) => ({ ...prev, wmcScore }));
-    // setCompletedTests((prev) => ({ ...prev, wmc: true }));
-  };
-
-  const markIPComplete = () => {
-    setCompletedTests((prev) => ({ ...prev, ip: true }));
-  };
-
-  const markWMCComplete = () => {
     setCompletedTests((prev) => ({ ...prev, wmc: true }));
   };
-
-  const markReadabilityComplete = () => {
-    setCompletedTests((prev) => ({ ...prev, readability: true }));
-  };
-
-useEffect(() => {
-  console.log("✅ Readability Done:", completedTests.readability);
-  console.log("✅ WMC Done:", completedTests.wmc);
-  console.log("✅ IP Done:", completedTests.ip);
-  console.log("✅ FormData Now:", formData);
-}, [completedTests, formData]);
-
-
-  useEffect(() => {
-  if (
-    completedTests.readability &&
-    completedTests.wmc &&
-    completedTests.ip &&
-    !completedTests.vat // ensure not already set
-  ) {
-    const vat = calculateVATScores(formData.wmcScore, formData.ipScore);
-    setFormData((prev) => ({ ...prev, vatScore: vat }));
-    console.log("✅ VAT scores updated in formData:", vat);
-    setCompletedTests((prev) => ({ ...prev, vat: true }));
-  }
-}, [completedTests, formData.wmcScore, formData.ipScore]);
-
     
+  
     const handleInputChange = (e) => {
       const { name, value } = e.target;
       setFormData({ ...formData, [name]: value });
@@ -242,7 +150,6 @@ useEffect(() => {
       }
     }, []);
 
-  
     
   return  (
     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
@@ -275,7 +182,7 @@ useEffect(() => {
           </button>
           {isReadabilityOpen && (
             <div className="p-6 bg-gray-50 rounded-b-lg">
-              <ReadabilityAssessment updateScores={updateScores}   markReadabilityComplete={markReadabilityComplete} />
+              <ReadabilityAssessment updateScores={updateScores} />
             </div>
           )}
         </div>
@@ -290,7 +197,7 @@ useEffect(() => {
           </button>
           {isWMCOpen && (
             <div className="p-6 bg-gray-50 rounded-b-lg">
-              <WMCAssessment updateScoresWMC={updateScoresWMC} markWMCComplete={markWMCComplete} />
+              <WMCAssessment updateScoresWMC={updateScoresWMC} />
             </div>
           )}
         </div>
@@ -305,7 +212,7 @@ useEffect(() => {
           </button>
           {isIPOpen && (
             <div className="p-6 bg-gray-50 rounded-b-lg">
-              <IPAssessment updateScoresIP={updateScoresIP}  markIPComplete={markIPComplete} />
+              <IPAssessment updateScoresIP={updateScoresIP} />
             </div>
           )}
         </div>
@@ -313,7 +220,6 @@ useEffect(() => {
 
         <button
     onClick={sendFormDataToBackend}
-      // onClick={() => navigate('/thankyou')}
     className="bg-blue-500 hover:bg-blue-600 text-white  py-4 px-20 rounded text-2xl font-bold center w-full"
 >
     Submit

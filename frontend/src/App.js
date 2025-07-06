@@ -8,6 +8,7 @@ import LoadingScreen from "./pages/LoadingScreen";
 import SurveyPage from "./pages/SurveyPage";
 import CviTest from "./components/CviTest";
 import ThreeTests from "./components/ThreeTests";
+import ThankYou from "./components/ThankYou";
 
 function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -25,8 +26,9 @@ function App() {
               <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/survey" element={<SurveyPage />} />
-                <Route path="/cvitest" element={<CviTest />} />
+                <Route path="/visual_perception_test" element={<CviTest />} />
                 <Route path="/three_tests" element={<ThreeTests />} />
+                <Route path="/thankyou" element={<ThankYou />} />
               </Routes>
         
             </main>

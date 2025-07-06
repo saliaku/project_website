@@ -1,6 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect,useRef} from 'react';
+import { useLocation } from "react-router-dom";
 
-const ReadabilityAssessment = ({ updateScores }) => {
+const ReadabilityAssessment = ({ updateScores, markReadabilityComplete }) => {
+
+   const location = useLocation();  // ✅ correct position
+    const incomingFormData = location.state || {};
+    
+    const [formData, setFormData] = useState({
+            ...incomingFormData, // include data from previous pages
+    })
+  // const aIssue = formData.auditoryIssue?.toLowerCase() === "yes"; // boolean
+  const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
+
+
   const [text, setText] = useState('');
   const [score, setScore] = useState(null);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -18,7 +30,7 @@ const ReadabilityAssessment = ({ updateScores }) => {
     return Math.max(0, Math.min(100, Math.round(fleschScore))); // Limit score between 0 and 100
   };
 
-  const countSyllables = (word) => {
+   const countSyllables = (word) => {
     word = word.toLowerCase();
     if (word.length <= 3) return 1;
     const syllablePattern = /[aeiouy]+/g;
@@ -41,7 +53,36 @@ const ReadabilityAssessment = ({ updateScores }) => {
     setScore(readabilityScore);
     updateScores(readabilityScore); // Update the parent component's score
     setIsCompleted(true); // Set the completion state
+    markReadabilityComplete();
   };
+
+useEffect(() => {
+  if (isCompleted) {
+    console.log("✅ readability completed. Final formData:", formData);
+  }
+}, [isCompleted, formData]);
+
+const hasInitializedRef = useRef(false);
+
+useEffect(() => {
+  if (vIssue === "full" && !hasInitializedRef.current) {
+    hasInitializedRef.current = true;
+    setIsCompleted(true);
+    updateScores(0);
+    markReadabilityComplete();
+  }
+}, [vIssue, updateScores]);
+
+  if (vIssue === "full") {
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+        <h1 className="text-2xl font-bold">No Applicable Tests</h1>
+        <p className="text-xl mt-4">You may skip this section.</p>
+      </div>
+    );
+  }
+  
+  
 
   if (isCompleted) {
     return (

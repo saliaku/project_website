@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
+import { useLocation } from "react-router-dom";
 const importAll = (r) => r.keys().map(r);
+
 
 // Import images and audio files
 const rawImages = importAll(require.context('../media/images', false, /\.(jpeg|jpg|png|gif)$/));
@@ -70,15 +72,36 @@ const shuffleArray = (array, limit = 7) => {
   return array.sort(() => Math.random() - 0.5).slice(0, limit);
 };
 
-const WMCAssessment = ({ updateScoresWMC }) => {
-  const [currentTest, setCurrentTest] = useState('image'); // 'image', 'audio', 'text'
+const WMCAssessment = ({ updateScoresWMC, markWMCComplete }) => {
+
+  const location = useLocation();  // ✅ correct position
+  const incomingFormData = location.state || {};
+
+   const [formData, setFormData] = useState({
+            ...incomingFormData, // include data from previous pages
+    })
+
+  const aIssue = formData.auditoryIssue?.toLowerCase() === "yes"; // boolean
+  const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
+
+   // Determine test order
+   const getTestOrder = () => {
+    if (vIssue === "full" && aIssue) return []; // No tests possible
+    if (vIssue === "full") return ['audio'];
+    if (aIssue) return ['image', 'text'];
+    return ['image', 'audio', 'text'];
+  };
+  const [testOrder, setTestOrder] = useState(getTestOrder());
+  const [testIndex, setTestIndex] = useState(0);
+  const [currentTest, setCurrentTest] = useState(getTestOrder()[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [sectionScore, setSectionScore] = useState({ image: 0, audio: 0, text: 0 });
   const [items, setItems] = useState([]);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false); 
 
   useEffect(() => {
+
     // Initialize items based on the current test type and shuffle them
     let initialItems = [];
     switch (currentTest) {
@@ -115,17 +138,59 @@ const WMCAssessment = ({ updateScoresWMC }) => {
     if (currentIndex < items.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // Proceed to the next test or end the assessment
-      if (currentTest === 'image') {
-        setCurrentTest('audio');
-      } else if (currentTest === 'audio') {
-        setCurrentTest('text');
+      // // Proceed to the next test or end the assessment
+      // if (currentTest === 'image') {
+      //    if (aIssue) {
+      //     setCurrentTest('text'); // skip audio if auditory impaired
+      //   } else {
+      //     setCurrentTest('audio');
+      //   }
+      // } else if (currentTest === 'audio') {
+      //   setCurrentTest('text');
+      // }  else if (currentTest === 'text')  {
+      //   setIsCompleted(true); // Mark the test as completed
+      // }
+
+       const nextIndex = testIndex + 1;
+      if (nextIndex < testOrder.length) {
+        setCurrentTest(testOrder[nextIndex]);
+        setTestIndex(nextIndex);
+        setCurrentIndex(0);
       } else {
-        setIsCompleted(true); // Mark the test as completed
+        setIsCompleted(true);
+        markWMCComplete();
       }
-      setCurrentIndex(0); // Reset index for the next test
+      // setCurrentIndex(0); // Reset index for the next test
     }
   };
+
+  useEffect(() => {
+    if (isCompleted) {
+      console.log("✅ wmc completed. Final formData:", formData);
+    }
+  }, [isCompleted, formData]);
+  
+
+const hasInitializedRef = useRef(false);
+
+  useEffect(() => {
+  if (testOrder.length === 0 && !hasInitializedRef.current) {
+    hasInitializedRef.current = true;
+    updateScoresWMC({ image: 0, audio: 0, text: 0 }); // Optional: reflect skipped
+    setIsCompleted(true);
+    markWMCComplete();
+  }
+}, [testOrder, updateScoresWMC]);
+
+
+   if (testOrder.length === 0) {
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+        <h1 className="text-2xl font-bold">No Applicable Tests</h1>
+        <p className="text-xl mt-4">You may skip this section.</p>
+      </div>
+    );
+  }
 
   if (isCompleted) {
     return (

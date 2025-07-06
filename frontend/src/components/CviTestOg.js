@@ -29,9 +29,8 @@ const CviTest = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const incomingFormData = location.state || {};
-const [formData, setFormData] = useState({
-            ...incomingFormData});
+  const formData = location.state || {};
+
 
   useEffect(() => {
     // if (!location.state) {
@@ -41,10 +40,10 @@ const [formData, setFormData] = useState({
 
     if (cards.length === 0) {
       const newCards = [];
-      const numberOfCards = 60;
+      const numberOfCards = 48;
 
       // Indices for odd (target) tiles
-      const oddIndices = [0, 9, 12, 17, 24, 25, 34, 35, 42, 47, 50, 59];
+      const oddIndices = [0, 7, 10, 13, 19, 20, 27, 28, 34, 37, 40, 47];
       setOddCardIndices(oddIndices);
 
       for (let i = 0; i < numberOfCards; i++) {
@@ -70,10 +69,6 @@ const handleSubmit = () => {
   let correct = 0;
 
   const totalClicked = selected.length;
-  if (totalClicked === 0) {
-    alert(`Nothing is clicked! Please select at least one tile.`);
-    return;
-  }
 
   selected.forEach((selectedIdx) => {
     if (oddCardIndices.includes(selectedIdx)) correct++;
@@ -96,7 +91,7 @@ const handleSubmit = () => {
     center: 0,
   };
 
-  const numCols = 10;
+  const numCols = 8;
   const numRows = 6;
 
   selected.forEach((index) => {
@@ -108,7 +103,7 @@ const handleSubmit = () => {
     else if (row >= numRows / 2 && col < numCols / 2) quadrantClicks.bottomLeft++;
     else if (row >= numRows / 2 && col >= numCols / 2) quadrantClicks.bottomRight++;
 
-    if (row >= 1 && row <= 5 && col >= 2 && col <= 6) {
+    if (row >= 1 && row <= 4 && col >= 2 && col <= 5) {
       quadrantClicks.center++;
     }
   });
@@ -166,32 +161,22 @@ const handleSubmit = () => {
   //     : `No odd tiles were correctly identified.\nFinal Quadrant Code: ${finalQuadrantCode}`
   // );
 
-  // const cvi_submission = {
-  //   finalScore: correct,
-  //   totalClicks: totalClicked,
-  //   wrongSelect: wrongClicked,
-  //   finalQuadrantCode,
-  // };
-
-const updatedData = {
-  ...formData,
-  cviScore: {
+  const cvi_submission = {
     finalScore: correct,
     totalClicks: totalClicked,
     wrongSelect: wrongClicked,
-    finalQuadrantCode: finalQuadrantCode,
-  }
-};
+    finalQuadrantCode,
+  };
 
-setFormData(updatedData);
+//   navigate('/three_tests', {
+//   state: {
+//     ...formData,
+//     cviScore: cvi_submission
+//   }
+// });
 
-navigate('/three_tests', {
-  state: updatedData
-});
 
-
-
-  // console.log("Submitting to backend.", cvi_submission);
+  console.log("Submitting to backend.", cvi_submission);
   // navigate('/three_tests');
 };
 
@@ -206,7 +191,7 @@ navigate('/three_tests', {
       </div>
 
       <div className="flex-grow px-4 py-2">
-        <div className="grid grid-cols-10 gap-4">
+        <div className="grid grid-cols-8 gap-4">
           {cards.map((item, idx) => (
             <div
               key={idx}
@@ -222,9 +207,10 @@ navigate('/three_tests', {
         <div className="text-center mt-6">
           <button
             onClick={handleSubmit}
+            disabled={selected.length === 0}
             className="bg-blue-500 hover:bg-blue-600 text-gray-50 py-4 px-20 rounded text-2xl font-semibold"
           >
-            Next Page
+            Submit
           </button>
         </div>
       </div>
