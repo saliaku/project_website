@@ -59,8 +59,6 @@ router.post('/', async (req, res) => {
 
     try {
         const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
-        const MOODLE_URL = "http://144.24.155.112/webservice/rest/server.php";
-        const MOODLE_API_TOKEN = "594ba42e18befd7b6de28ea5e156ed7e";
 
     
         // Update the mdl_user table with the new assessment scores
@@ -73,12 +71,22 @@ router.post('/', async (req, res) => {
                 ipt = ?, 
                 wmv = ?, 
                 wma = ?, 
-                wmt = ?
+                wmt = ?,
+                v = ?,
+                a = ?,
+                t = ?,
+                auditoryIssue = ?,
+                visualIssue = ?,
+                cviScore = ?,
+                totalClicks = ?,
+                wrongSelect = ?,
+                quadrantCode = ?
             WHERE id = ?;
         `;
     
         const db = await connectDB(); // Ensure database connection is established
         await db.query(updateQuery, [
+            
             fleschScore,
             ipScore.image,
             ipScore.audio,
@@ -86,49 +94,44 @@ router.post('/', async (req, res) => {
             wmcScore.image,
             wmcScore.audio,
             wmcScore.text,
+            vatScore.v,
+            vatScore.a,
+            vatScore.t,
+            auditoryIssue,
+            visualIssue,
+            cviScore.finalScore,
+            cviScore.totalClicks,
+            cviScore.wrongSelect,
+            cviScore.finalQuadrantCode,
+            
             userid // `id` in `mdl_user` represents the user
         ]);
     
         // Update the mdl_user table with the new assessment scores
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        const insertQuery = `
-        INSERT INTO mdl_course_modules_completion (
-            id,              
-            coursemoduleid,  
-            userid,          
-            completionstate, 
-            timemodified     
-        ) 
-        VALUES (NULL, ?, ?, 1, ?);
-        `;
+        // const currentTimestamp = Math.floor(Date.now() / 1000);
+        // const insertQuery = `
+        // INSERT INTO mdl_course_modules_completion (
+        //     id,              
+        //     coursemoduleid,  
+        //     userid,          
+        //     completionstate, 
+        //     timemodified     
+        // ) 
+        // VALUES (NULL, ?, ?, 1, ?);
+        // `;
 
-        await db.query(insertQuery, [
-            cmid, userid, currentTimestamp
-        ]);
+        // await db.query(insertQuery, [
+        //     cmid, userid, currentTimestamp
+        // ]);
 
-
-        // Send request to Moodle API to mark activity completion
-        // const response = await axios.post(MOODLE_URL, null, {
-        //     params: {
-        //         wstoken: MOODLE_API_TOKEN,
-        //         wsfunction: "core_completion_update_activity_completion_status_manually",
-        //         moodlewsrestformat: "json",
-        //         cmid,
-        //         completed: 1,
-        //         userid
-        //     },
-        // });
-    
-        // res.json(response.data);
 
     } catch (error) {
         console.error("Error updating Moodle quiz status:", error);
         res.status(500).json({ error: "Failed to update quiz status in Moodle" });
     }
+
     
 });
 
 // Export the router
 module.exports = router;
-
-
