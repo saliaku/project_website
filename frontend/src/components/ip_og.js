@@ -197,7 +197,7 @@ const auditoryQuestions = [
   // Add other auditory questions here...
 ];
 
-const IPAssessment = ({ updateScoresIP }) => {
+const IPAssessment = ({ updateScoresIP, markIPComplete }) => {
   const [currentStep, setCurrentStep] = useState("intro");
   const [currentSection, setCurrentSection] = useState("text");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -260,6 +260,7 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
           if (vIssue === "full") {
               if (aIssue) {
                 setCurrentStep("results");
+                 markIPComplete();
                 // setIsCompleted(true); // skip both visual and audio
               } else {
                 startSection("audio"); // skip visual, do audio
@@ -271,11 +272,13 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
           if (aIssue) {
           setCurrentStep("results"); // skip audio
           // setIsCompleted(true);
+           markIPComplete();
           } else {
             startSection("audio"); // audio is okay
           }
         }  else if (currentSection === "audio") {
           setCurrentStep("results");
+          markIPComplete();
           // setIsCompleted(true);
         }
         
@@ -297,15 +300,16 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
     }
   };
 
-// const hasInitializedRef = useRef(false);
-// useEffect(() => {
-//   if (aIssue && vIssue === "full" && !hasInitializedRef.current) {
-//     hasInitializedRef.current = true;
+const hasInitializedRef = useRef(false);
+useEffect(() => {
+  if (aIssue && vIssue === "full" && !hasInitializedRef.current) {
+    hasInitializedRef.current = true;
     
-//     updateScoresIP({ text: 0, image: 0, audio: 0 }); // Optional: to record skipped section
-//     // setIsCompleted(true);
-//   }
-// }, [aIssue, vIssue, updateScoresIP]);
+    updateScoresIP({ text: 0, image: 0, audio: 0 }); // Optional: to record skipped section
+    setIsCompleted(true);
+    markIPComplete();
+  }
+}, [aIssue, vIssue, updateScoresIP]);
 
 
 // useEffect(() => {
