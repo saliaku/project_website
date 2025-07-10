@@ -55,7 +55,7 @@ const SurveyPage = () => {
     finalScore: 0,
     totalClicks: 0,
     wrongSelect: 0,
-    finalQuadrantCode: 0,
+    finalQuadrantCode: 10,
   },
   });
 
