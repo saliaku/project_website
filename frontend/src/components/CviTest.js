@@ -103,6 +103,9 @@ const handleSubmit = () => {
     const row = Math.floor(index / numCols);
     const col = index % numCols;
 
+    // if (row >= 1 && row <= 5 && col >= 2 && col <= 6) {
+    //   quadrantClicks.center++;
+    // }
     if (row < numRows / 2 && col < numCols / 2) quadrantClicks.topLeft++;
     else if (row < numRows / 2 && col >= numCols / 2) quadrantClicks.topRight++;
     else if (row >= numRows / 2 && col < numCols / 2) quadrantClicks.bottomLeft++;
@@ -112,6 +115,8 @@ const handleSubmit = () => {
       quadrantClicks.center++;
     }
   });
+
+  // console.log('quad values',quadrantClicks.topLeft,quadrantClicks.topRight,quadrantClicks.bottomLeft,quadrantClicks.bottomRight,quadrantClicks.center);
 
   // Determine final quadrant code
   const regionCodes = {
@@ -133,6 +138,7 @@ const handleSubmit = () => {
   const bottom = bottomLeft + bottomRight;
   const left = topLeft + bottomLeft;
   const right = topRight + bottomRight;
+  const all = top +bottom;
 
   const regionCounts = {
     [regionCodes.topLeft]: topLeft,
@@ -144,6 +150,7 @@ const handleSubmit = () => {
     [regionCodes.bottom]: bottom,
     [regionCodes.left]: left,
     [regionCodes.right]: right,
+    [regionCodes.allEqual]: all,
   };
 
   // Get region with max count
@@ -152,13 +159,31 @@ const handleSubmit = () => {
     (key) => regionCounts[key] === maxCount
   );
 
-  let finalQuadrantCode;
+const priorityOrder = [
+  regionCodes.center,
+  regionCodes.topLeft,
+  regionCodes.topRight,
+  regionCodes.bottomLeft,
+  regionCodes.bottomRight,
+  regionCodes.top,
+  regionCodes.bottom,
+  regionCodes.left,
+  regionCodes.right,
+];
 
-  if (maxRegions.length === 1) {
-    finalQuadrantCode = parseInt(maxRegions[0]);
-  } else {
-    finalQuadrantCode = regionCodes.allEqual;
+  // console.log('bigger quad values',regionCodes.top,regionCodes.right,regionCodes.left,regionCodes.bottom,regionCodes.allEqual);
+
+
+  let finalQuadrantCode = regionCodes.allEqual;
+
+  for (const code of priorityOrder) {
+  if (regionCounts[code] === maxCount) {
+    finalQuadrantCode = code;
+    break;
   }
+}
+
+
 
   // alert(
   //   correctOddSelections.length > 0
@@ -182,6 +207,8 @@ const updatedData = {
     finalQuadrantCode: finalQuadrantCode,
   }
 };
+
+console.log("cvi quad: ", finalQuadrantCode);
 
 setFormData(updatedData);
 
