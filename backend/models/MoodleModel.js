@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const moodleSchema = mongoose.Schema(
   {
     cmid: { type: Number, required: true },
-    userid: { type: Number, required: true },
+    userId: { type: Number, required: true },
     name: { type: String, required: true },
     school: { type: String, required: true },
     rollNumber: { type: String, required: true },
@@ -31,9 +31,6 @@ const moodleSchema = mongoose.Schema(
     },
     auditoryIssue : { type: String, required: true },
     visualIssue : { type: String, required: true },
-    
-    
-    
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields
