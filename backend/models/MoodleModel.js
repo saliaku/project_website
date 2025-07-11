@@ -18,16 +18,22 @@ const moodleSchema = mongoose.Schema(
       audio: { type: Number, required: true, default: 0 },
       text: { type: Number, required: true, default: 0 },
     },
-
+    vatScore:{
     v : { type: Number, required: true, default: 0 },
     a : { type: Number, required: true, default: 0 },
-    t : { type: Number, required: true, default: 0 },
-    auditoryIssue : { type: String, required: true },
-    visualIssue : { type: String, required: true },
-    cviScore : { type: Number, required: true, default: 0 },
+    t : { type: Number, required: true, default: 0 }
+    },
+    cviScore:{
+    finalScore : { type: Number, required: true, default: 0 },
     totalClicks : { type: Number, required: true, default: 0 },
     wrongSelect : { type: Number, required: true, default: 0 },
-    quadrantCode : { type: Number, required: true, default: 10 }
+    finalQuadrantCode : { type: Number, required: true, default: 10 }
+    },
+    auditoryIssue : { type: String, required: true },
+    visualIssue : { type: String, required: true },
+    
+    
+    
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields
