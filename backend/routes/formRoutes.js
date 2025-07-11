@@ -58,7 +58,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const { userid, cmid, fleschScore, ipScore, wmcScore } = req.body;
+        const { userid, cmid, visualIssue, auditoryIssue, fleschScore, ipScore, wmcScore, vatScore } = req.body;
 
     
         // Update the mdl_user table with the new assessment scores
