@@ -34,6 +34,9 @@ const connectDB = async () => {
             }
         });
 
+        // ✅This message will only run if connection is successful
+        console.log(`Connected to Moodle Database: ${process.env.MYSQL_HOST}`);
+
         // Return the connection object
         return connection;
 
