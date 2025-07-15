@@ -147,7 +147,7 @@ router.post('/', async (req, res) => {
 
     try {
     const {
-        userid,
+        userId,
         cmid,
         visualIssue,
         auditoryIssue,
@@ -204,7 +204,7 @@ router.post('/', async (req, res) => {
         cviScore.totalClicks,
         cviScore.wrongSelect,
         cviScore.finalQuadrantCode,
-        userid
+        userId
     ]);
 
     if (result.affectedRows === 0) {
@@ -212,12 +212,12 @@ router.post('/', async (req, res) => {
         return res.status(404).json({
             alert: true,
             message: 'No rows updated in mdl_user (userid may be incorrect).',
-            userid: userid,
+            userid: userId,
             params: req.body
         });
     }
 
-    console.log(`Moodle DB updated for user ID ${userid}`);
+    console.log(`Moodle DB updated for user ID ${userId}`);
     res.status(200).json({ message: 'User data updated successfully.' });
 
 } catch (error) {
