@@ -58,65 +58,86 @@ router.post('/', async (req, res) => {
     // }
 
     try {
-        const { userid, cmid, visualIssue, auditoryIssue, cviScore, fleschScore, ipScore, wmcScore, vatScore } = req.body;
+        const {
+        userid,
+        cmid,
+        visualIssue,
+        auditoryIssue,
+        cviScore,
+        fleschScore,
+        ipScore,
+        wmcScore,
+        vatScore
+    } = req.body;
 
-        console.log("trying to write to moodle database")
-        // Update the mdl_user table with the new assessment scores
-        const updateQuery = `
-            UPDATE mdl_user 
-            SET 
-                flesch = ?, 
-                ipv = ?, 
-                ipa = ?, 
-                ipt = ?, 
-                wmv = ?, 
-                wma = ?, 
-                wmt = ?,
-                v = ?,
-                a = ?,
-                t = ?,
-                auditoryIssue = ?,
-                visualIssue = ?,
-                cviScore = ?,
-                totalClicks = ?,
-                wrongSelect = ?,
-                quadrantCode = ?
-            WHERE id = ?;
-        `;
+    console.log('Received form data:', req.body);
+    console.log("Attempting to write to Moodle database...");
 
-        if (updateQuery.affectedRows === 0) {
-            console.error('Moodle DB Update: No rows affected.');
+    const moodleModel = new MoodleModel(req.body);
+    console.log('Using model:', MoodleModel.modelName);
 
-            return res.status(404).json({
-                alert: true,
-                message: 'No rows updated in mdl_user (userid may be incorrect).',
-                userid: userid,
-                params: params
-            });
-        }
-    
-        const db = await connectDB(); // Ensure database connection is established
-        await db.query(updateQuery, [
-            
-            fleschScore,
-            ipScore.image,
-            ipScore.audio,
-            ipScore.text,
-            wmcScore.image,
-            wmcScore.audio,
-            wmcScore.text,
-            vatScore.v,
-            vatScore.a,
-            vatScore.t,
-            auditoryIssue,
-            visualIssue,
-            cviScore.finalScore,
-            cviScore.totalClicks,
-            cviScore.wrongSelect,
-            cviScore.finalQuadrantCode,
-            
-            userid // `id` in `mdl_user` represents the user
-        ]);
+    const updateQuery = `
+        UPDATE mdl_user 
+        SET 
+            flesch = ?, 
+            ipv = ?, 
+            ipa = ?, 
+            ipt = ?, 
+            wmv = ?, 
+            wma = ?, 
+            wmt = ?,
+            v = ?,
+            a = ?,
+            t = ?,
+            auditoryIssue = ?,
+            visualIssue = ?,
+            cviScore = ?,
+            totalClicks = ?,
+            wrongSelect = ?,
+            quadrantCode = ?
+        WHERE id = ?;
+    `;
+
+    const db = await connectDB(); // make sure this is using mysql2/promise
+    const [result] = await db.execute(updateQuery, [
+        fleschScore,
+        ipScore.image,
+        ipScore.audio,
+        ipScore.text,
+        wmcScore.image,
+        wmcScore.audio,
+        wmcScore.text,
+        vatScore.v,
+        vatScore.a,
+        vatScore.t,
+        auditoryIssue,
+        visualIssue,
+        cviScore.finalScore,
+        cviScore.totalClicks,
+        cviScore.wrongSelect,
+        cviScore.finalQuadrantCode,
+        userid
+    ]);
+
+    if (result.affectedRows === 0) {
+        console.error('Moodle DB Update: No rows affected.');
+        return res.status(404).json({
+            alert: true,
+            message: 'No rows updated in mdl_user (userid may be incorrect).',
+            userid: userid,
+            params: req.body
+        });
+    }
+
+    console.log(`Moodle DB updated for user ID ${userid}`);
+    res.status(200).json({ message: 'User data updated successfully.' });
+
+    } catch (error) {
+        console.error('Error updating Moodle database:', error);
+        res.status(500).json({
+            error: 'Internal server error',
+            details: error.message
+        });
     
         // Update the mdl_user table with the new assessment scores
         // const currentTimestamp = Math.floor(Date.now() / 1000);
