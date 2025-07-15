@@ -16,6 +16,7 @@ const connectDB = async () => {
     //connection to moodle
     try {
         // Create a connection to the Moodle database
+        console.log("try block working")
         const connection = await mysql.createConnection({
             host: process.env.MYSQL_HOST,    // Database host
             user: process.env.MYSQL_USER,    // Database user

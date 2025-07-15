@@ -12,55 +12,55 @@ router.get('/test', (req, res) => {
 
 // POST route to handle form submissions
 router.post('/', async (req, res) => {
-    try {
-        // Log the incoming request data
-        console.log('Received form data:', req.body);
+    // try {
+    //     // Log the incoming request data
+    //     console.log('Received form data:', req.body);
 
 
-        // Create new form data instance
-        const moodleModel = new MoodleModel(req.body);
+    //     // Create new form data instance
+    //     const moodleModel = new MoodleModel(req.body);
 
-        console.log('Using model:', MoodleModel.modelName);
-
-
-        // Save to database
-        const savedData = await moodleModel.save();
-        console.log('Successfully saved form data:', savedData);
-
-        // Send success response
-        res.status(201).json({
-            success: true,
-            message: 'Form data saved successfully',
-            data: savedData
-        });
+    //     console.log('Using model:', MoodleModel.modelName);
 
 
+    //     // Save to database
+    //     const savedData = await moodleModel.save();
+    //     console.log('Successfully saved form data:', savedData);
 
-    } catch (error) {
-        // Log the error for debugging
-        console.error('Error in form submission:', error);
+    //     // Send success response
+    //     res.status(201).json({
+    //         success: true,
+    //         message: 'Form data saved successfully',
+    //         data: savedData
+    //     });
 
-        // Handle MongoDB validation errors
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({
-                success: false,
-                message: 'Validation Error',
-                errors: Object.values(error.errors).map(err => err.message)
-            });
-        }
 
-        // Handle other errors
-        res.status(500).json({
-            success: false,
-            message: 'Server error while saving form data',
-            error: error.message
-        });connectDB
-    }
+
+    // } catch (error) {
+    //     // Log the error for debugging
+    //     console.error('Error in form submission:', error);
+
+    //     // Handle MongoDB validation errors
+    //     if (error.name === 'ValidationError') {
+    //         return res.status(400).json({
+    //             success: false,
+    //             message: 'Validation Error',
+    //             errors: Object.values(error.errors).map(err => err.message)
+    //         });
+    //     }
+
+    //     // Handle other errors
+    //     res.status(500).json({
+    //         success: false,
+    //         message: 'Server error while saving form data',
+    //         error: error.message
+    //     });connectDB
+    // }
 
     try {
         const { userid, cmid, visualIssue, auditoryIssue, cviScore, fleschScore, ipScore, wmcScore, vatScore } = req.body;
 
-    
+        console.log("trying to write to moodle database")
         // Update the mdl_user table with the new assessment scores
         const updateQuery = `
             UPDATE mdl_user 
