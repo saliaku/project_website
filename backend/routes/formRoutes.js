@@ -83,6 +83,17 @@ router.post('/', async (req, res) => {
                 quadrantCode = ?
             WHERE id = ?;
         `;
+
+        if (updateQuery.affectedRows === 0) {
+            console.error('Moodle DB Update: No rows affected.');
+
+            return res.status(404).json({
+                alert: true,
+                message: 'No rows updated in mdl_user (userid may be incorrect).',
+                userid: userid,
+                params: params
+            });
+        }
     
         const db = await connectDB(); // Ensure database connection is established
         await db.query(updateQuery, [
