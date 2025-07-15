@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const importAll = (r) => r.keys().map(r);
 
 
@@ -72,9 +72,11 @@ const shuffleArray = (array, limit = 7) => {
   return array.sort(() => Math.random() - 0.5).slice(0, limit);
 };
 
-const WMCAssessment = ({ updateScoresWMC, markWMCComplete }) => {
+const WMCAssessment = () => {
 
   const location = useLocation();  // ✅ correct position
+  const navigate = useNavigate(); // ✅ define navigate
+
   const incomingFormData = location.state || {};
 
    const [formData, setFormData] = useState({
@@ -83,6 +85,23 @@ const WMCAssessment = ({ updateScoresWMC, markWMCComplete }) => {
 
   const aIssue = formData.auditoryIssue?.toLowerCase() === "yes"; // boolean
   const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
+  const quadrant = formData?.cviScore?.finalQuadrantCode ?? 10;
+
+  const getQuadrantStyle = (code) => {
+  switch (code) {
+    case 1: return 'top-0 left-1/2 -translate-x-1/2';         // Top center
+    case 2: return 'bottom-0 left-1/2 -translate-x-1/2';      // Bottom center
+    case 3: return 'top-1/2 left-0 -translate-y-1/2';         // Center left
+    case 4: return 'top-1/2 right-0 -translate-y-1/2';        // Center right
+    case 5: return 'top-0 left-0';                            // Top left
+    case 6: return 'top-0 right-0';                           // Top right
+    case 7: return 'bottom-0 left-0';                         // Bottom left
+    case 8: return 'bottom-0 right-0';                        // Bottom right
+    case 9: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'; // Center
+    case 10: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh]';                                // Full screen
+    default: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 '; // Default center
+  }
+};
 
    // Determine test order
    const getTestOrder = () => {
@@ -130,7 +149,6 @@ const WMCAssessment = ({ updateScoresWMC, markWMCComplete }) => {
             ...prevScores,
             [currentTest]: prevScores[currentTest] + 1,
           };
-          updateScoresWMC(updatedScores); // Pass the updated scores
           return updatedScores;
         });
       }
@@ -158,7 +176,6 @@ const WMCAssessment = ({ updateScoresWMC, markWMCComplete }) => {
         setCurrentIndex(0);
       } else {
         setIsCompleted(true);
-        markWMCComplete();
       }
       // setCurrentIndex(0); // Reset index for the next test
     }
@@ -176,11 +193,35 @@ const hasInitializedRef = useRef(false);
   useEffect(() => {
   if (testOrder.length === 0 && !hasInitializedRef.current) {
     hasInitializedRef.current = true;
-    updateScoresWMC({ image: 0, audio: 0, text: 0 }); // Optional: reflect skipped
+    // updateScoresWMC({ image: 0, audio: 0, text: 0 }); // Optional: reflect skipped
     setIsCompleted(true);
-    markWMCComplete();
   }
-}, [testOrder, updateScoresWMC]);
+}, [testOrder]);
+
+
+ const starContainerRef = useRef(null);
+  
+    useEffect(() => {
+      const numStars = 50;
+      const container = starContainerRef.current;
+  
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement("div");
+        const size = Math.random() * 3 + 1;
+        const xPosition = Math.random() * 100;
+        const yPosition = Math.random() * 100;
+        const animationDuration = Math.random() * 2 + 1;
+  
+        star.classList.add("star");
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${xPosition}%`;
+        star.style.top = `${yPosition}%`;
+        star.style.animationDuration = `${animationDuration}s`;
+  
+        container.appendChild(star);
+      }
+    }, []);
 
 
    if (testOrder.length === 0) {
@@ -188,21 +229,62 @@ const hasInitializedRef = useRef(false);
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
         <h1 className="text-2xl font-bold">No Applicable Tests</h1>
         <p className="text-xl mt-4">You may skip this section.</p>
+         <button
+        onClick={() => navigate('/thankyou', { state: formData })}
+        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+      >
+        Submit
+      </button>
       </div>
     );
   }
 
   if (isCompleted) {
     return (
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
-        <h1 className="text-2xl font-bold">This Section Completed</h1>
-        <p className="text-xl mt-4">Go on to the next test below</p>
+      <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
+      <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+  <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg shadow-lg resize overflow-auto justify-center text-center`}
+   style={{
+    // minWidth: '33vw',
+    // minHeight: '40vh',
+    maxWidth: '90vw',
+    maxHeight: '80vh',
+    width: '33vw',
+    height: '36vh',
+    boxSizing: 'border-box',
+  }}
+  >
+            <div className="w-full h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-6 text-center overflow-auto">
+
+         <h1 className="text-2xl font-bold">This Section Completed</h1>
+       <button
+       
+        onClick={() => navigate('/thankyou', { state: formData })}
+       className="mt-6 bg-blue-700 hover:bg-green-800 text-white font-semibold py-4 px-6 rounded shadow transition duration-200"
+      >
+        Submit
+      </button>
       </div>
+       </div>
+        </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
+      <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+      <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg resize shadow-lg overflow-auto`}
+      style={{
+        // minWidth: '33vw',
+        // minHeight: '40vh',
+        maxWidth: '90vw',
+        maxHeight: '80vh',
+        width: '33vw',
+        // height: '36vh',
+        boxSizing: 'border-box',
+      }}
+      >
+
       <h1 className="text-2xl font-bold mb-4">Working Memory Capacity Assessment</h1>
       <h2 className="text-xl font-semibold mb-4">
         Current Test: {currentTest.charAt(0).toUpperCase() + currentTest.slice(1)}
@@ -272,8 +354,12 @@ const hasInitializedRef = useRef(false);
           Next
         </button>
       )}
+
+
+    </div>
     </div>
   );
+  
 };
 
 export default WMCAssessment;

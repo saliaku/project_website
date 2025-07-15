@@ -212,7 +212,7 @@ console.log("cvi quad: ", finalQuadrantCode);
 
 setFormData(updatedData);
 
-navigate('/three_tests', {
+navigate('/readability_test', {
   state: updatedData
 });
 
