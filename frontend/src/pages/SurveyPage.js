@@ -28,13 +28,11 @@ const SurveyPage = () => {
     }, []);
 
   const [formData, setFormData] = useState({
-    userId: '',
     cmid: '',
+    userId: '',
     name: '',
     school: '',
     rollNumber: '',
-    auditoryIssue:'',
-    visualIssue:'',
     fleschScore: '',
     ipScore: {
       image: 0,
@@ -57,6 +55,8 @@ const SurveyPage = () => {
     wrongSelect: 0,
     finalQuadrantCode: 10,
   },
+  auditoryIssue:'',
+  visualIssue:'',
   });
 
   //  const calculateVATScores = () => {

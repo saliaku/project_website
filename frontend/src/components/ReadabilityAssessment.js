@@ -14,7 +14,7 @@ const ReadabilityAssessment = () => {
   // const aIssue = formData.auditoryIssue?.toLowerCase() === "yes"; // boolean
   const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
   const quadrant = formData?.cviScore?.finalQuadrantCode ?? 10;
-  console.log('readability quad is',quadrant);
+  // console.log('readability quad is',quadrant);
 
   const [text, setText] = useState('');
   const [score, setScore] = useState(null);
@@ -108,6 +108,8 @@ useEffect(() => {
     useEffect(() => {
       const numStars = 50;
       const container = starContainerRef.current;
+
+      if (!container) return; // 🔒 Safeguard
   
       for (let i = 0; i < numStars; i++) {
         const star = document.createElement("div");
@@ -130,22 +132,64 @@ useEffect(() => {
 
   if (vIssue === "full") {
     return (
-      <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
+      <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+   <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg overflow-auto resize shadow-lg`}
+   style={{
+    // minWidth: '33vw',
+    // minHeight: '40vh',
+    maxWidth: '90vw',
+    maxHeight: '80vh',
+    // width: '33vw',
+    // height: '36vh',
+    // boxSizing: 'border-box',
+  }}
+  >
         <h1 className="text-2xl font-bold">No Applicable Tests</h1>
         <p className="text-xl mt-4">You may skip this section.</p>
+        <button
+    onClick={() => navigate('/ip_test', { state: formData })}
+      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+  >
+    Next Page
+  </button>
+
       </div>
+      </div>
+      
     );
   }
   
- 
-
-  
+   
 if (isCompleted) {
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
+      <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+   <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg overflow-auto resize shadow-lg`}
+   style={{
+    // minWidth: '33vw',
+    // minHeight: '40vh',
+    maxWidth: '90vw',
+    maxHeight: '80vh',
+    // width: '33vw',
+    // height: '36vh',
+    // boxSizing: 'border-box',
+  }}
+  >
       <h1 className="text-2xl font-bold">This Section Completed</h1>
       <p className="text-xl mt-4 mb-6">Go on to the next test below</p>
+       <button
+    onClick={() => navigate('/ip_test', { state: formData })}
+      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+  >
+    Next Page
+  </button>
+
     </div>
+    
+    </div>
+    
+    
   );
 }
 
@@ -176,12 +220,15 @@ if (isCompleted) {
         className="w-full p-2 border rounded-lg shadow"
         placeholder="Write about your school in 4-5 sentences."
       ></textarea>
-      <button
-        onClick={() => navigate('/ip_test', { state: formData })}
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-      >
-        Next Page
-      </button>
+      
+  {/* Submit button to calculate the readability score */}
+  <button
+    type="submit"
+    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+  >
+    Next Page
+  </button>
+
     </form>
   </div>
 </div>

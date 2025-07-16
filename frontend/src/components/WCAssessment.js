@@ -1,5 +1,8 @@
 import React, { useState, useEffect,useRef } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios'; // Import axios if you're using it
+import {calculateVATScores} from '../components/vat_calc';
+
 const importAll = (r) => r.keys().map(r);
 
 
@@ -182,10 +185,27 @@ const WMCAssessment = () => {
   };
 
   useEffect(() => {
-    if (isCompleted) {
-      console.log("✅ wmc completed. Final formData:", formData);
-    }
-  }, [isCompleted, formData]);
+  if (isCompleted) {
+    const wmcScore= {
+        image: sectionScore.image,
+        audio: sectionScore.audio,
+        text: sectionScore.text,
+      }
+
+    const ipScore = formData.ipScore;
+    const vat = calculateVATScores(wmcScore, ipScore);
+
+    const updatedFormData = {
+      ...formData,
+      wmcScore: wmcScore,
+      vatScore: vat,
+    };
+
+    setFormData(updatedFormData);
+    console.log("✅ wmc completed. Final formData with vat scores:", updatedFormData);
+  }
+}, [isCompleted]);
+
   
 
 const hasInitializedRef = useRef(false);
@@ -197,6 +217,60 @@ const hasInitializedRef = useRef(false);
     setIsCompleted(true);
   }
 }, [testOrder]);
+
+
+
+    const sendFormDataToBackend = async () => {
+           
+    // navigate('/thankyou');
+    
+    try {
+
+        // Log the data being sent
+        console.log('Sending form data to backend:', formData);
+
+        const response = await axios.post(
+            'https://kailas.kattangal.online/api/formdata',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Add better error handling
+                validateStatus: function (status) {
+                    return status >= 200 && status < 500;
+                }
+            }
+        );
+
+        console.log('Response from backend:', response.data);
+        
+        if (response.status === 201 || response.status === 200) {
+            alert('Form data sent successfully!');
+            navigate('/thankyou');
+        } else {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error details:', {
+            message: error.message,
+            response: error.response?.data,
+            status: error.response?.status
+        });
+        
+        let errorMessage = 'Failed to send form data. ';
+        if (error.response) {
+            errorMessage += `Server responded with: ${error.response.data?.message || error.response.status}`;
+        } else if (error.request) {
+            errorMessage += 'No response received from server.';
+        } else {
+            errorMessage += error.message;
+        }
+        
+        alert(errorMessage);
+    }
+};
+
 
 
  const starContainerRef = useRef(null);
@@ -258,8 +332,7 @@ const hasInitializedRef = useRef(false);
 
          <h1 className="text-2xl font-bold">This Section Completed</h1>
        <button
-       
-        onClick={() => navigate('/thankyou', { state: formData })}
+       onClick={sendFormDataToBackend}
        className="mt-6 bg-blue-700 hover:bg-green-800 text-white font-semibold py-4 px-6 rounded shadow transition duration-200"
       >
         Submit
