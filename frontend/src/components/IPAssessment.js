@@ -2,7 +2,7 @@ import React, { useState,useEffect,useRef } from "react";
 import testimage from "../media/ip_test_material/visual_test.jpeg"; // Replace with your actual image path
 import testaudio from "../media/ip_test_material/audio_test.mp4"; // Replace with your actual audio path
 import queimage from "../media/ip_test_material/option3.jpg"; 
-import { useLocation } from "react-router-dom";
+import { useLocation,useNavigate  } from "react-router-dom";
 
 const textRecap = `
 The water cycle is how water moves around the Earth. It starts when the Sun heats water in oceans, lakes, and rivers, turning it into vapor, which rises into the sky. This is called evaporation. The water vapor cools and forms clouds, a process called condensation. When the clouds get heavy, water falls back to the Earth as rain, snow, or hail—this is called precipitation. The water then flows back into rivers and oceans, ready to start the cycle again. This process helps keep plants, animals, and people alive.`;
@@ -197,7 +197,7 @@ const auditoryQuestions = [
   // Add other auditory questions here...
 ];
 
-const IPAssessment = ({ updateScoresIP, markIPComplete }) => {
+const IPAssessment = () => {
   const [currentStep, setCurrentStep] = useState("intro");
   const [currentSection, setCurrentSection] = useState("text");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -211,7 +211,8 @@ const IPAssessment = ({ updateScoresIP, markIPComplete }) => {
   });
 
   
-  const location = useLocation();  // ✅ correct position
+  const location = useLocation();
+  const navigate = useNavigate();
   const incomingFormData = location.state || {};
   
   const [formData, setFormData] = useState({
@@ -220,7 +221,23 @@ const IPAssessment = ({ updateScoresIP, markIPComplete }) => {
 
 const aIssue = formData.auditoryIssue?.toLowerCase() === "yes"; // boolean
 const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
+const quadrant = formData?.cviScore?.finalQuadrantCode ?? 10;
 
+  const getQuadrantStyle = (code) => {
+  switch (code) {
+    case 1: return 'top-0 left-1/2 -translate-x-1/2';         // Top center
+    case 2: return 'bottom-0 left-1/2 -translate-x-1/2';      // Bottom center
+    case 3: return 'top-1/2 left-0 -translate-y-1/2';         // Center left
+    case 4: return 'top-1/2 right-0 -translate-y-1/2';        // Center right
+    case 5: return 'top-0 left-0';                            // Top left
+    case 6: return 'top-0 right-0';                           // Top right
+    case 7: return 'bottom-0 left-0';                         // Bottom left
+    case 8: return 'bottom-0 right-0';                        // Bottom right
+    case 9: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'; // Center
+    case 10: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[60vh]';                                // Full screen
+    default: return 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 '; // Default center
+  }
+};
 
   const startSection = (section) => {
     setCurrentSection(section);
@@ -243,7 +260,7 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
             [currentSection]: prevSectionScore[currentSection] + 1,
           };
           // Update the overall score in parent component
-          updateScoresIP(updatedScores);
+          // updateScoresIP(updatedScores);
           return updatedScores;
         });
   
@@ -260,7 +277,7 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
           if (vIssue === "full") {
               if (aIssue) {
                 setCurrentStep("results");
-                 markIPComplete();
+                //  markIPComplete();
                 // setIsCompleted(true); // skip both visual and audio
               } else {
                 startSection("audio"); // skip visual, do audio
@@ -272,13 +289,13 @@ const vIssue = formData.visualIssue?.toLowerCase(); // "none", "partial", "full"
           if (aIssue) {
           setCurrentStep("results"); // skip audio
           // setIsCompleted(true);
-           markIPComplete();
+          //  markIPComplete();
           } else {
             startSection("audio"); // audio is okay
           }
         }  else if (currentSection === "audio") {
           setCurrentStep("results");
-          markIPComplete();
+          // markIPComplete();
           // setIsCompleted(true);
         }
         
@@ -305,11 +322,55 @@ useEffect(() => {
   if (aIssue && vIssue === "full" && !hasInitializedRef.current) {
     hasInitializedRef.current = true;
     
-    updateScoresIP({ text: 0, image: 0, audio: 0 }); // Optional: to record skipped section
+    // updateScoresIP({ text: 0, image: 0, audio: 0 }); // Optional: to record skipped section
     setIsCompleted(true);
-    markIPComplete();
+    // markIPComplete();
   }
-}, [aIssue, vIssue, updateScoresIP]);
+}, [aIssue, vIssue]);
+
+
+ const starContainerRef = useRef(null);
+  
+    useEffect(() => {
+      const numStars = 50;
+      const container = starContainerRef.current;
+  
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement("div");
+        const size = Math.random() * 3 + 1;
+        const xPosition = Math.random() * 100;
+        const yPosition = Math.random() * 100;
+        const animationDuration = Math.random() * 2 + 1;
+  
+        star.classList.add("star");
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${xPosition}%`;
+        star.style.top = `${yPosition}%`;
+        star.style.animationDuration = `${animationDuration}s`;
+  
+        container.appendChild(star);
+      }
+    }, []);
+
+useEffect(() => {
+  if (currentStep === "results" && !isCompleted) {
+    const finalScore = sectionScore.text + sectionScore.image + sectionScore.audio;
+    const updatedFormData = {
+      ...formData,
+      ipScore: {
+        text: sectionScore.text,
+        image: sectionScore.image,
+        audio: sectionScore.audio,
+        total: finalScore,
+      }
+    };
+    setFormData(updatedFormData);
+    setIsCompleted(true);
+    console.log("✅ IP Assessment completed. Final formData:", updatedFormData);
+  }
+}, [currentStep, isCompleted, formData, sectionScore]);
+
 
 
 // useEffect(() => {
@@ -323,6 +384,14 @@ useEffect(() => {
       <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
         <h1 className="text-2xl font-bold">No Applicable Tests</h1>
         <p className="text-xl mt-4">You may skip this section.</p>
+         <button
+            onClick={() => {
+              navigate("/wmc_test", { state: formData });  // Pass formData to next test
+            }}
+            className="mt-6 bg-blue-700 hover:bg-green-800 text-white font-semibold py-4 px-6 rounded shadow transition duration-200"
+          >
+            Next Page
+          </button>
       </div>
     );
   }
@@ -338,8 +407,21 @@ useEffect(() => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full">
+  <div className="relative min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden">
+  <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
+
+    {/* <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4"> */}
+  <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg overflow-auto resize shadow-lg`}
+      style={{
+    // minWidth: '33vw',
+    // minHeight: '40vh',
+    maxWidth: '90vw',
+    maxHeight: '80vh',
+    width: '33vw',
+    // height: '45vh',
+    boxSizing: 'border-box',
+  }}
+      >
         {currentStep === "intro" && (
           <div>
             <h2 className="text-lg font-bold mb-4">General Instructions</h2>
@@ -468,9 +550,18 @@ useEffect(() => {
 
         {currentStep === "results" && (
         //  <div className="text-center">
-          <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+          // <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-lg text-center">
+            <div className="w-full h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-6 text-center overflow-auto">
           <h1 className="text-2xl font-bold">This Section Completed</h1>
-          <p className="text-xl mt-4">You may submit the form if all sections are complete.</p> 
+          <button
+            onClick={() => {
+              navigate("/wmc_test", { state: formData });  // Pass formData to next test
+            }}
+            className="mt-6 bg-blue-700 hover:bg-green-800 text-white font-semibold py-4 px-6 rounded shadow transition duration-200"
+          >
+            Next Page
+          </button>
+          {/* <p className="text-xl mt-4">You may submit the form if all sections are complete.</p>  */}
          {/* </div> */}
             {/* <p>
               Your total score: {score} out of{" "}
@@ -496,6 +587,7 @@ useEffect(() => {
         )} 
       </div>
     </div>
+    // </div>
   );
 };
 

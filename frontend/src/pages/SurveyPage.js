@@ -28,35 +28,35 @@ const SurveyPage = () => {
     }, []);
 
   const [formData, setFormData] = useState({
-    userId: '',
     cmid: '',
+    userId: '',
     name: '',
     school: '',
     rollNumber: '',
-    auditoryIssue:'',
-    visualIssue:'',
-  //   fleschScore: '',
-  //   ipScore: {
-  //     image: 0,
-  //     audio: 0,
-  //     text: 0,
-  //   },
-  //   wmcScore: {
-  //     image: 0,
-  //     audio: 0,
-  //     text: 0,
-  //   },
-  //   vatScore:{
-  //     v:0,
-  //     a:0,
-  //     t:0,
-  //   },
+    fleschScore: '',
+    ipScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
+    wmcScore: {
+      image: 0,
+      audio: 0,
+      text: 0,
+    },
+    vatScore:{
+      v:0,
+      a:0,
+      t:0,
+    },
     cviScore: {
     finalScore: 0,
     totalClicks: 0,
     wrongSelect: 0,
-    finalQuadrantCode: 0,
+    finalQuadrantCode: 10,
   },
+  auditoryIssue:'',
+  visualIssue:'',
   });
 
   //  const calculateVATScores = () => {
