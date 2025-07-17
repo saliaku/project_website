@@ -39,7 +39,7 @@ const ThankYou = () => {
           onClick={() => navigate('/')}
           className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg font-semibold"
         >
-          Back to Home
+          Go back to Home page
         </button>
       </div>
     </div>
