@@ -7,11 +7,12 @@ import LandingPage from "./pages/LandingPage";
 import LoadingScreen from "./pages/LoadingScreen";
 import SurveyPage from "./pages/SurveyPage";
 import CviTest from "./components/CviTest";
-import ThreeTests from "./components/ThreeTests";
+// import ThreeTests from "./components/ThreeTests";
 import ThankYou from "./components/ThankYou";
 import ReadabilityAssessment from "./components/ReadabilityAssessment";
 import IPAssessment from "./components/IPAssessment";
 import WMCAssessment from "./components/WCAssessment";
+import NoTest from './components/noTest';
 
 function App() {
   const [loadingComplete, setLoadingComplete] = useState(false);
@@ -35,8 +36,10 @@ function App() {
                 <Route path="/ip_test" element={<IPAssessment/>} />
                 <Route path="/wmc_test" element={<WMCAssessment/>} />
 
-                <Route path="/three_tests" element={<ThreeTests />} />
+                {/* <Route path="/three_tests" element={<ThreeTests />} /> */}
+                <Route path="/notest" element={<NoTest />} />
                 <Route path="/thankyou" element={<ThankYou />} />
+
               </Routes>
         
             </main>
