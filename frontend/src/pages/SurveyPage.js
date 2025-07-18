@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // import IPAssessment from '../components/IPAssessment';
 // import CviTest from '../components/CviTest'; 
 import "../index.css"; // Import your Tailwind CSS
-import axios from 'axios'; // Import axios if you're using it
+// import axios from 'axios'; // Import axios if you're using it
 import { useNavigate } from 'react-router-dom';
 
 const SurveyPage = () => {
@@ -117,7 +117,7 @@ const SurveyPage = () => {
       //   alert('Form data sent successfully!');
 
         if (formData.visualIssue === "full") {
-        navigate("/three_tests", { state: { ...formData } }); //  skip CVI
+        navigate("/readability_test", { state: { ...formData } }); //  skip CVI
         } else {
           navigate("/visual_perception_test", { state: { ...formData } }); // go to CVI
         }
