@@ -334,7 +334,7 @@ useEffect(() => {
     useEffect(() => {
       const numStars = 50;
       const container = starContainerRef.current;
-  
+      if (!container) return;
       for (let i = 0; i < numStars; i++) {
         const star = document.createElement("div");
         const size = Math.random() * 3 + 1;
@@ -427,7 +427,7 @@ useEffect(() => {
             <h2 className="text-lg font-bold mb-4">General Instructions</h2>
             <div className="mb-4">
               This test will assess your ability to process information across three sections:{" "}
-              <strong>Text, Visual, and Auditory</strong>. Each section includes
+              <strong>Text, Visual, and Auditory</strong> (depending on sections which are applicable to you). Each section includes
               multiple-choice questions (MCQs) based on the provided content.
               Follow these instructions for a successful attempt:
               <ul className="list-disc pl-5 mt-2 mb-4">

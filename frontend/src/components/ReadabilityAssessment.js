@@ -96,8 +96,9 @@ const hasInitializedRef = useRef(false);
 useEffect(() => {
   if (vIssue === "full" && !hasInitializedRef.current) {
     hasInitializedRef.current = true;
-    setIsCompleted(true);
+    
     setFormData(prev => ({ ...prev, fleschScore: 0 }));
+    setIsCompleted(true);
     // updateScores(0);
     // markReadabilityComplete();
   }
@@ -160,40 +161,36 @@ useEffect(() => {
     );
   }
   
-   
-if (isCompleted) {
-  return (
-     <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
+
+  if (isCompleted) {
+    return (
+      <div className="relative bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-900 overflow-hidden min-h-screen pb-0 mb-0">
       <div ref={starContainerRef} className="absolute inset-0 bg-stars overflow-hidden"></div>
-   <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg overflow-auto resize shadow-lg`}
+  <div className={`absolute ${getQuadrantStyle(quadrant)} p-6 bg-white rounded-lg shadow-lg resize overflow-auto justify-center text-center`}
    style={{
     // minWidth: '33vw',
     // minHeight: '40vh',
     maxWidth: '90vw',
     maxHeight: '80vh',
-    // width: '33vw',
-    // height: '36vh',
-    // boxSizing: 'border-box',
+    width: '33vw',
+    height: '36vh',
+    boxSizing: 'border-box',
   }}
   >
-      <h1 className="text-2xl font-bold">This Section Completed</h1>
-      <p className="text-xl mt-4 mb-6">Go on to the next test below</p>
+            <div className="w-full h-full flex flex-col justify-center items-center bg-white rounded-lg shadow-lg p-6 text-center overflow-auto">
+
+         <h1 className="text-2xl font-bold">This Section Completed</h1>
        <button
-    onClick={() => navigate('/ip_test', { state: formData })}
-      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-  >
-    Next Page
-  </button>
-
-    </div>
-    
-    </div>
-    
-    
-  );
-}
-
-
+       onClick={() => navigate('/ip_test', { state: formData })}
+       className="mt-6 bg-blue-700 hover:bg-green-800 text-white font-semibold py-4 px-6 rounded shadow transition duration-200"
+      >
+        Next Page
+      </button>
+      </div>
+       </div>
+        </div>
+    );
+  }
 
 
   return (

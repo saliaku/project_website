@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const colorOptions = ['black', 'pink'];
+const colorOptions = ['black', 'white'];
 const matching = colorOptions[0];
 const different = colorOptions[1];
 
@@ -227,8 +227,9 @@ navigate('/readability_test', {
       <div className="max-w-7xl mx-auto p-6 relative z-10 bg-black bg-opacity-20 rounded-lg shadow-md mb-6">
         <h2 className="text-2xl font-semibold mb-4 text-gray-50">Pick the Pink Color Tiles</h2>
         <p className="text-gray-50 mb-4">
-          Please select all the PINK TILES as accurately as possible.
-          Please scroll down to submit this test and move on to the next page.
+          Please select all the WHITE TILES as accurately as possible.
+          Before attempting the test, make sure you align the page to completely view 6 rows and 10 columns.
+          Once completed, scroll down to submit this test and move on to the next page.
         </p>
       </div>
 
