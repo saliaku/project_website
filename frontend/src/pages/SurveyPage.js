@@ -30,10 +30,10 @@ const SurveyPage = () => {
   const [formData, setFormData] = useState({
     cmid: '',
     userId: '',
-    name: '',
-    school: '',
-    rollNumber: '',
-    fleschScore: '',
+    name: 'student',
+    school: 'school',
+    rollNumber: '1',
+    fleschScore: 0,
     ipScore: {
       image: 0,
       audio: 0,
@@ -90,7 +90,7 @@ const SurveyPage = () => {
   const navigate = useNavigate();
 
   const sendFormDataToBackend = async () => {
-    if (!formData.name || !formData.school || !formData.rollNumber|| !formData.visualIssue || !formData.auditoryIssue) {
+    if (!formData.visualIssue || !formData.auditoryIssue) {
         alert('Please fill in all details & attempt the tests.');
         return;
     }
@@ -116,11 +116,60 @@ const SurveyPage = () => {
       // if (response.status === 201 || response.status === 200) {
       //   alert('Form data sent successfully!');
 
-        if (formData.visualIssue === "full") {
-        navigate("/readability_test", { state: { ...formData } }); //  skip CVI
-        } else {
-          navigate("/visual_perception_test", { state: { ...formData } }); // go to CVI
+    if (formData.visualIssue === "full" && formData.auditoryIssue === "yes") {
+      const updatedFormData = {
+        ...formData,
+        name: 'student',
+        school: 'school',
+        rollNumber: '1',
+        fleschScore: 0,
+        ipScore: { image: 0, audio: 0, text: 0 },
+        wmcScore: { image: 0, audio: 0, text: 0 },
+        vatScore: { v: 0, a: 0, t: 0 },
+        cviScore: {
+          finalScore: 0,
+          totalClicks: 0,
+          wrongSelect: 0,
+          finalQuadrantCode: 10,
         }
+      };
+
+    setFormData(updatedFormData);
+    navigate("/notest", { state: updatedFormData });
+  }
+
+
+     else if (formData.visualIssue === "full") {
+        const updatedFormData = {
+          ...formData,
+          name: 'student',
+          school: 'school',
+          rollNumber: '1',
+          fleschScore: 0,
+          cviScore: {
+            finalScore: 0,
+            totalClicks: 0,
+            wrongSelect: 0,
+            finalQuadrantCode: 10,
+          }
+        };
+        setFormData(updatedFormData);
+        navigate("/ip_test", { state: updatedFormData });
+      }
+
+
+      else {
+        const updatedFormData = {
+          ...formData,
+          name: 'student',
+          school: 'school',
+          rollNumber: '1',
+           };
+        setFormData(updatedFormData);
+        navigate("/visual_perception_test", { state: { ...updatedFormData } }); // Go to CVI
+      }
+        
+        
 
 //       } else {
 //         throw new Error(`Server responded with status ${response.status}`);
@@ -246,8 +295,8 @@ const SurveyPage = () => {
   </ul>
 </div>
 
-      <div className="max-w-4xl mx-auto p-6 relative z-10 pb-0 mb-0"> {/* Removed bottom padding */}
-        <div className="space-y-6">
+      <div className="max-w-4xl mx-auto p-6 relative z-10 pb-0 mb-0">
+     {/*    <div className="space-y-6">
           <label className="block text-white mb-2">
             Name:
             <input
@@ -280,7 +329,7 @@ const SurveyPage = () => {
               className="w-full p-3 mt-2 mb-4 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </label>
-        </div>
+        </div> */}
 
 
 {/* 
