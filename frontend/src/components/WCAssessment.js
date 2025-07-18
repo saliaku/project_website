@@ -278,7 +278,7 @@ const hasInitializedRef = useRef(false);
     useEffect(() => {
       const numStars = 50;
       const container = starContainerRef.current;
-  
+      if (!container) return;
       for (let i = 0; i < numStars; i++) {
         const star = document.createElement("div");
         const size = Math.random() * 3 + 1;
