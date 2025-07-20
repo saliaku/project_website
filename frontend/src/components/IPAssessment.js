@@ -1,65 +1,65 @@
 import React, { useState,useEffect,useRef } from "react";
-import testimage from "../media/ip_test_material/visual_test.jpeg"; // Replace with your actual image path
-import testaudio from "../media/ip_test_material/audio_test.mp4"; // Replace with your actual audio path
-import queimage from "../media/ip_test_material/option3.jpg"; 
+import testimage from "../media/ip_test_material/visual_test.jpg"; // Replace with your actual image path
+import testaudio from "../media/ip_test_material/ip_audio.mp4"; // Replace with your actual audio path
 import { useLocation,useNavigate  } from "react-router-dom";
 
 const textRecap = `
-The water cycle is how water moves around the Earth. It starts when the Sun heats water in oceans, lakes, and rivers, turning it into vapor, which rises into the sky. This is called evaporation. The water vapor cools and forms clouds, a process called condensation. When the clouds get heavy, water falls back to the Earth as rain, snow, or hail—this is called precipitation. The water then flows back into rivers and oceans, ready to start the cycle again. This process helps keep plants, animals, and people alive.`;
+Exploring Space: 
+Space is a huge place that begins just above the Earth’s atmosphere. It has no air, so astronauts need special suits to breathe and stay safe. The Earth is part of a group of planets called the solar system, which moves around the Sun. There are also stars, moons, comets, and asteroids in space. Some stars are much bigger than the Sun, while others are smaller. Scientists called astronomers use telescopes to study space and discover new things about the universe. Space is still full of mysteries waiting to be explored!`;
 
 const textQuestions = [
   {
-    question: "What is the process called when water turns into vapor and rises into the sky?",
-    options: ["Precipitation", "Evaporation", "Condensation", "Freezing"],
-    correctAnswer: "Evaporation",
+    question: " What do we call the group of planets that move around the Sun?",
+    options: ["Galaxy", "Solar System", "Universe", "Asteroid belt"],
+    correctAnswer: "Solar System",
   },
   {
-    question: 'Why do clouds form in the sky?',
+    question: "Why do astronauts wear special suits in space?",
     options: [
-      "Water vapor cools and turns into clouds",
-      "The Sun heats the clouds",
-      "Rain falls and creates clouds",
-      " Clouds rise from the ground",
+      "To fly faster",
+      "To carry heavy things",
+      "Because there is no air in space",
+      "To look cool",
     ],
-    correctAnswer: "Water vapor cools and turns into clouds",
+    correctAnswer: "Because there is no air in space",
   },
   {
     question:
-      "On a very sunny day, which part of the water cycle is likely to happen faster?",
+      " If you wanted to see a star that is far away, what tool would you use?",
     options: [
-      " Condensation",
-      "Evaporation",
-      "Precipitation",
-      "Freezing",
+      "Microscope",
+      "Telescope",
+      "Binoculars",
+      "Calculator",
     ],
-    correctAnswer: "Evaporation",
+    correctAnswer: "Telescope",
   },
   {
-    question: "What could happen to plants if there was no precipitation for a long time?",
+    question: "What might happen if there were no astronomers studying space?",
     options: [
-      "Plants would grow taller",
-      "Plants would dry out and may die",
-      " Plants would have extra water",
-      "Plants would turn into clouds",
+      "We would know less about the universe",
+      "The planets would stop moving",
+      "Stars would disappear",
+      "Astronauts could not fly to space",
     ],
     correctAnswer:
-      "Plants would dry out and may die",
+      "We would know less about the universe",
   },
   {
     question:
-      "Why is the water cycle important for life on Earth?",
-    options: [" It creates electricity", "It keeps water clean and flowing for plants, animals, and people", "It makes the Sun shine brighter", "It helps clouds stay in the sky"],
-    correctAnswer: "It keeps water clean and flowing for plants, animals, and people",
+      " Which of these is the most important reason to protect Earth while exploring space?",
+    options: ["Because space has no trees or oceans", "Because Earth is our home and has life", "Because astronauts need a place to practice flying", "Because space is too cold"],
+    correctAnswer: "Because Earth is our home and has life",
   },
   {
-    question: "If you were to write a story about the water cycle, what would be the best way to start?",
+    question: " If you could design a space mission, what would you choose to explore?",
     options: [
-      "Describe a raindrop falling from a cloud",
-      "Begin with a water droplet in the ocean",
-      "Show plants using water to grow",
-      "Introduce a river flowing to the ocean",
+      " A new planet to learn about its weather and land",
+      "A playground in space",
+      "A spaceship that only goes in circles",
+      " A place with nothing to discover",
     ],
-    correctAnswer: "Begin with a water droplet in the ocean",
+    correctAnswer: " A new planet to learn about its weather and land",
   },
 ];
 
@@ -69,52 +69,49 @@ Look carefully at the image provided and answer the questions based on your memo
 
 const visualQuestions = [
   {
-    question: "Which is the correct order of shapes in the image?",
+    question: "What is the sequence of seasons in the image?",
     options: [
-      "Circle, square, rectangle",
-      "Triangle, circle, square",
-      "Square, circle, triangle",
-      "Rectangle, triangle, circle",
+      "Summer, Winter, Spring, Autumn",
+      "Winter, Summer, Autumn, Spring",
+      "Winter, Spring, Summer, Autumn",
+      "Autumn, Winter, Spring, Summer",
     ],
-    correctAnswer: "Square, circle, triangle",
+    correctAnswer: "Winter, Spring, Summer, Autumn",
   },
 
   {
-    question: "What geometric property does the square have?",
-    options: ["All sides are equal", "No sides are equal", "It has no straight lines", "It has only one side"],
-    correctAnswer: "All sides are equal",
+    question: "What is happening to the leaves in the autumn part of the picture?",
+    options: ["They are growing bigger", "They are falling and changing color", "They are covered in snow", "They are turning into flowers"],
+    correctAnswer: "They are falling and changing color",
   },
 
   {
-    question: "Is Square a Rectangle?",
+    question: "	If you wanted to pick a flowering tree, which part of the image shows the best time to do that?",
     options: [
-      "Yes",
-      "No",
-    ],
-    correctAnswer: "Yes",
+      "Summer", "Winter", "Autumn", "Spring"],
+    correctAnswer: "Spring",
   },
   {
-    question: "Which shapes are symmetrical? (Symmetry means if you fold a shape along a line, both sides will match perfectly.)",
+    question: "Compare the tree in winter and summer. What is the biggest difference you can see?",
     options: [
-      "Circle and triangle",
-      "Square and circle",
-      "Only the square",
-      "All shapes",
+      "The tree is taller in summer",
+      "The tree has leaves in summer but none in winter",
+      " The tree changes into a different kind of tree",
+      "The tree moves to a new place",
     ],
-    correctAnswer: "All shapes",
+    correctAnswer: "The tree has leaves in summer but none in winter",
   },
 
   {
-    question: " Which shape would be the most difficult to draw freehand?",
-    options: ["square", "triangle", "circle", "All"],
-    correctAnswer: "circle",
+    question: "In which season does the tree look most empty in the picture?",
+    options: ["Summer", "Winter", "Autumn", "Spring"],
+    correctAnswer: "Winter",
   },
 
   {
-    question: 'Can this image be created using the shapes given ?',
-    options: ['Yes', 'No'],
-    correctAnswer: 'No', // Assuming the image shows a square, circle, and triangle
-    image: queimage, // Path to the image generated or created from shapes
+    question: 'If you could add one more small detail to the autumn part of the picture, what would match best?',
+    options: ["Wind blowing the leaves", "Snow falling from the sky", "New flowers growing", "Green leaves getting bigger"],
+    correctAnswer: "Wind blowing the leaves", // Assuming the image shows a square, circle, and triangle
   },
 
   // Add other visual questions here...
@@ -128,71 +125,71 @@ const auditoryQuestions = [
   {
     question: "What was the second sound in the audio clip?",
     options: [
-      "A car honking",
-      "A high-pitched bell",
-      "Thunder",
-      "Birds chirping",
+      "Alarm clock",
+      "Rain falling",
+      " Dog barking",
+      "Pages turning",
     ],
-    correctAnswer: "Thunder",
+    correctAnswer: "Rain falling",
   },
 
   {
-    question: "What does the sound of a car honking typically indicate?",
+    question: "What does the first sound usually tell you?",
     options: [
-      "A warning or attention",
-      "A relaxing atmosphere",
-      " The start of a storm",
-      "A bird is nearby",
+      "It’s time to wake up",
+      "It’s raining",
+      "Someone is reading",
+      " A dog is barking",
     ],
-    correctAnswer: "A warning or attention",
-  },
-
-  {
-    question:
-      "If you wanted to simulate an incoming storm in a soundscape, which of these sounds would you focus on?",
-    options: [
-      "A car honking",
-      "A high-pitched bell",
-      "Thunder",
-      "Birds chirping",
-    ],
-    correctAnswer: "Thunder",
+    correctAnswer: "It’s time to wake up",
   },
 
   {
     question:
-      'Which two sounds in the sequence can be categorized as "natural"',
+      "	If you hear pages turning, where are you most likely?",
     options: [
-      "Car honking and high-pitched bell",
-      " Thunder and birds chirping",
-      "High-pitched bell and birds chirping",
-      "Thunder and car honking",
+      " In a library or reading at home",
+      "In the kitchen",
+      "Outside in the rain",
+      "At a dog park",
     ],
-    correctAnswer: " Thunder and birds chirping",
+    correctAnswer: " In a library or reading at home",
   },
 
   {
     question:
-      "You are designing an alarm system for use during a thunderstorm. Which sound would be the least reliable for alerting people during the storm?",
+      '	How is the dog barking sound different from the other three sounds?',
     options: [
-      "A car honking",
-      "A high-pitched bell",
-      "Thunder",
-      "Birds chirping",
+      "It is softer than all other sounds",
+      "It happens at night only",
+      "It is made by an animal",
+      "It sounds like rain",
     ],
-    correctAnswer: "Thunder",
+    correctAnswer: "It is made by an animal",
   },
 
   {
     question:
-      " How would you use the sounds to enhance a storytelling scene about a peaceful morning turning into chaos?",
+      "	If you could only listen to one of these sounds to know what time of day it is, which would you choose?",
     options: [
-      "Birds chirping → Car honking → Thunder",
-      "Car honking → Birds chirping → Thunder",
-      "Thunder → High-pitched bell → Birds chirping",
-      "Thunder → High-pitched bell → Car honking",
+      "Dog barking",
+      "Rain falling",
+      "Pages turning",
+      "Alarm clock",
     ],
-    correctAnswer: "Birds chirping → Car honking → Thunder",
+    correctAnswer: "Alarm clock",
+  },
+
+  {
+    question:
+      "	If you wanted to make an audio about your morning, which two sounds would you include?",
+    options: [
+      " Pages turning and dog barking",
+      "Alarm clock and pages turning",
+      " Rain falling and pages turning",
+      "Dog barking and rain falling",
+    ],
+    correctAnswer: "Alarm clock and pages turning",
   },
   // Add other auditory questions here...
 ];

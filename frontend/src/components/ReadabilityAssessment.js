@@ -215,7 +215,7 @@ useEffect(() => {
         onChange={(e) => setText(e.target.value)}
         rows="8"
         className="w-full p-2 border rounded-lg shadow"
-        placeholder="Write about your school in 4-5 sentences."
+        placeholder="Write about your favourite place/show etc in about 4-5 sentences."
       ></textarea>
       
   {/* Submit button to calculate the readability score */}
