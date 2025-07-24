@@ -125,10 +125,10 @@ const auditoryQuestions = [
   {
     question: "What was the second sound in the audio clip?",
     options: [
+      "Dog barking",
       "Alarm clock",
       "Rain falling",
-      " Dog barking",
-      "Pages turning",
+      "Car honking",
     ],
     correctAnswer: "Rain falling",
   },
@@ -138,7 +138,7 @@ const auditoryQuestions = [
     options: [
       "It’s time to wake up",
       "It’s raining",
-      "Someone is reading",
+      "There's a vehicle nearby",
       " A dog is barking",
     ],
     correctAnswer: "It’s time to wake up",
@@ -146,14 +146,14 @@ const auditoryQuestions = [
 
   {
     question:
-      "	If you hear pages turning, where are you most likely?",
+      "	If you hear car honking, where are you most likely?",
     options: [
-      " In a library or reading at home",
+      "On the road",
       "In the kitchen",
       "Outside in the rain",
       "At a dog park",
     ],
-    correctAnswer: " In a library or reading at home",
+    correctAnswer: "On the road",
   },
 
   {
@@ -174,7 +174,7 @@ const auditoryQuestions = [
     options: [
       "Dog barking",
       "Rain falling",
-      "Pages turning",
+      "Car honking",
       "Alarm clock",
     ],
     correctAnswer: "Alarm clock",
@@ -184,12 +184,12 @@ const auditoryQuestions = [
     question:
       "	If you wanted to make an audio about your morning, which two sounds would you include?",
     options: [
-      " Pages turning and dog barking",
-      "Alarm clock and pages turning",
-      " Rain falling and pages turning",
+      "Car honking and dog barking",
+      "Alarm clock and dog barking",
+      "Rain falling and car honking",
       "Dog barking and rain falling",
     ],
-    correctAnswer: "Alarm clock and pages turning",
+    correctAnswer: "Alarm clock and dog barking",
   },
   // Add other auditory questions here...
 ];
