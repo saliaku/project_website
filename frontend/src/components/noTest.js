@@ -22,7 +22,7 @@ const NoTest = () => {
         console.log('Sending form data to backend- for both auditory & visual issue:', formData);
 
         const response = await axios.post(
-            'https://kailas.kattangal.online/api/formdata',
+            'https://68.233.115.209/api/formdata',
             formData,
             {
                 headers: {

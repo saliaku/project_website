@@ -53,9 +53,9 @@ const LoadingScreen = ({ setLoadingComplete }) => {
       <div ref={starContainerRef} className="absolute inset-0 bg-stars"></div>
 
       <div className="absolute bottom-5 right-5 p-4 text-white text-lg font-semibold">
-        <p>Kailas B210518CS</p>
-        <p>Sreeshma B210035CS</p>
-        <p>Serena B210031CS</p>
+        <p>Kailas Nath</p>
+        <p>Sreeshma Sangesh</p>
+        <p>Serena Anthony</p>
       </div>
     </div>
   );
