@@ -230,7 +230,7 @@ const hasInitializedRef = useRef(false);
         console.log('Sending form data to backend:', formData);
 
         const response = await axios.post(
-            'https://kailas.kattangal.online/api/formdata',
+            'https://68.233.115.209/api/formdata',
             formData,
             {
                 headers: {
